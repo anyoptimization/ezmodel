@@ -239,7 +239,7 @@ class Benchmark:
 
         return ret
 
-    def statistics(self, metric="mae", vals=['mean', 'std', 'min', 'max', 'median'], sort=None):
+    def statistics(self, metric="mae", vals=['mean', 'std', 'min', 'max', 'median'], sort_by="mean", ascending=True):
         try:
             import pandas as pd
         except:
@@ -249,8 +249,8 @@ class Benchmark:
         tbl = df.groupby(["label"]).agg({metric: vals})
         df.groupby(["label"]).agg({metric: vals})
 
-        if sort is not None:
-            tbl = tbl.sort_values((metric, vals[0]), ascending=sort)
+        if sort_by is not None:
+            tbl = tbl.sort_values((metric, sort_by), ascending=ascending)
 
         return tbl
 

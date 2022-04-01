@@ -2,14 +2,14 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ezmodel.models.kriging import Kriging
-from ezmodel.util.sample_from_func import sine_function
+from ezmodel.util.sample_from_func import square_function
 
 model = Kriging(regr="linear",
                 corr="gauss",
                 ARD=False)
 
 # create some data to test this model on
-X, y, _X, _y = sine_function(100, 20)
+X, y, _X, _y = square_function(100, 20)
 
 # let the model fit the data
 model.fit(X, y)

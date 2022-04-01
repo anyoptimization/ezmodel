@@ -17,7 +17,7 @@ data = dict(
     description="Machine Learning, Model, Surrogate, Metamodels, Response Surface",
     license='Apache License 2.0',
     keywords="model",
-    install_requires=['numpy>=1.15', "pandas", "scipy", "sklearn", "pydacefit", "pySOT==0.2.3"],
+    install_requires=['numpy', "pandas", "scipy", "sklearn", "pydacefit", "matplotlib"],
     include_package_data=True,
     platforms='any',
     classifiers=[

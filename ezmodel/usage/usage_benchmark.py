@@ -25,4 +25,4 @@ partitions = CrossvalidationPartitioning(k_folds=5, seed=1).do(X)
 benchmark.do(X, y, partitions=partitions)
 
 # print out the benchmark results
-print(benchmark.statistics("mae", sort="ascending"))
+print(benchmark.statistics("mae"))

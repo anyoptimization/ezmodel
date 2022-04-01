@@ -1,4 +1,4 @@
-ezmodel - A common interface for models and model selection
+ezmodel - A Common Interface for Models and Model Selection
 ====================================================================
 
 For more information about our toolbox, users are encouraged to read our documentation.
@@ -67,7 +67,7 @@ Benchmarking
     benchmark.do(X, y, partitions=partitions)
 
     # print out the benchmark results
-    print(benchmark.statistics("mae", sort="ascending"))
+    print(benchmark.statistics("mae"))
 
 
 

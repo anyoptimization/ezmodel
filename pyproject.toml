@@ -1,0 +1,36 @@
+# pyproject.toml — tooling config for the pyclawd quality gate.
+# Curated for ezmodel during pyclawd adoption (see AGENTS.md).
+
+[tool.ruff]
+line-length = 120
+# experimental/ holds rough, partially-broken scratch code (dead imports); it is
+# out of scope for the gate. scratch.py is a developer scratchpad, not source.
+extend-exclude = ["ezmodel/experimental", "tests/scratch.py"]
+
+[tool.ruff.lint]
+# One-line-per-file docstring doctrine: enable pydocstyle (D) for module/package
+# docstrings + docstring style, but drop the per-symbol mandates (document every
+# class/method/function) for this first pass — can be tightened later.
+select = ["E", "F", "I", "D"]
+ignore = ["D101", "D102", "D103", "D105", "D107"]
+
+[tool.ruff.lint.pydocstyle]
+# ezmodel's existing docstrings are numpy-style.
+convention = "numpy"
+
+[tool.mypy]
+files = ["ezmodel"]
+explicit_package_bases = true
+# experimental/ is out of scope (dead imports would error).
+exclude = "ezmodel/experimental/"
+# Scientific-Python deps (numpy/pandas/scipy/sklearn/matplotlib + optional model
+# backends) ship without type stubs; don't fail typecheck on missing third-party stubs.
+ignore_missing_imports = true
+
+[tool.pytest.ini_options]
+markers = [
+    "slow: long-running tests (excluded from the default tier)",
+    "integration: tests needing live services",
+    "optional: needs optional model backends (GPy, gpflow, smt, pySOT)",
+    "golden: behavior-oracle snapshots (run via `pyclawd golden`)",
+]

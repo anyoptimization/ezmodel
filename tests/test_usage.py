@@ -1,6 +1,8 @@
 import os
 from pathlib import Path
 
+import pytest
+
 
 def run_usage(usages):
     usages = [f for f in usages]
@@ -28,6 +30,7 @@ def run_usage(usages):
 
 
 
+@pytest.mark.optional
 def test_usages():
     folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ezmodel", "usage")
     run_usage([os.path.join(folder, fname) for fname in Path(folder).glob('**/*.py')])

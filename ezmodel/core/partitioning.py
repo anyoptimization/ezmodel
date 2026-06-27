@@ -34,5 +34,5 @@ def merge_and_partition(trn, tst):
     X, y = trn
     X_test, y_test = tst
     partitions = [(np.arange(len(X)), np.arange(len(X), len(X) + len(X_test)))]
-    X, y = np.row_stack([X, X_test]), np.concatenate([y, y_test])
+    X, y = np.vstack([X, X_test]), np.concatenate([y, y_test])
     return X, y, partitions

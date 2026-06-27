@@ -1,6 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
+from ezmodel.models.mean import SimpleMean  # noqa: F401  (public surface kept for the example)
 from ezmodel.models.svr import SVR
 from ezmodel.util.sample_from_func import sine_function
 

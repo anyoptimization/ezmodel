@@ -1,3 +1,5 @@
+"""Base ``Model`` class: the fit/predict lifecycle with pre- and post-processing."""
+
 import time
 
 import numpy as np
@@ -50,7 +52,7 @@ class Model:
             X = X[:, self.active_dims]
 
         if self.eliminate_duplicates:
-            I = ~is_duplicate(X, eps=self.eliminate_duplicates_eps)
+            I = ~is_duplicate(X, eps=self.eliminate_duplicates_eps)  # noqa: E741  (I is an identity matrix)
             X, y = X[I], y[I]
 
         if self.filter_nan_and_inf:

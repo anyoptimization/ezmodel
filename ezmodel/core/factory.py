@@ -1,3 +1,5 @@
+"""Factories that instantiate model objects from classes and parameter grids."""
+
 import copy
 from abc import abstractmethod
 
@@ -50,7 +52,7 @@ def models_from_clazzes(*clazzes, **defaults):
 
 
 def dfs(params):
-    """
+    """Expand a dict of parameter lists into all value combinations.
 
     Parameters
     ----------

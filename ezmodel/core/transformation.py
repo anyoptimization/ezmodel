@@ -1,3 +1,5 @@
+"""Base ``Transformation`` interface for invertible input/output transforms."""
+
 from abc import abstractmethod
 
 

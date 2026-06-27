@@ -1,8 +1,10 @@
+"""SMT-backed Kriging surrogate model (optional dependency)."""
+
 import numpy as np
 
 try:
     from smt.surrogate_models import KRG
-except:
+except:  # noqa: E722  (optional dependency import guard)
     raise Exception("Model not found. Please execute: 'pip install smt'")
 
 from ezmodel.core.model import Model

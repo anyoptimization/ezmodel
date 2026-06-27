@@ -1,3 +1,5 @@
+"""k-nearest-neighbors surrogate model."""
+
 import numpy as np
 
 from ezmodel.core.model import Model
@@ -18,7 +20,7 @@ class KNN(Model):
 
         D = calc_dist(X, _X)
 
-        I = D.argsort(axis=1)[:, : self.n_nearest]
+        I = D.argsort(axis=1)[:, : self.n_nearest]  # noqa: E741  (I is a neighbor-index matrix)
 
         _d = np.take_along_axis(D, I, axis=1)
         _d = _d**self.p

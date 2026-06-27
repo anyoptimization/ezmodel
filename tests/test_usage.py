@@ -1,3 +1,5 @@
+"""Test that executes the bundled usage example scripts."""
+
 import os
 from pathlib import Path
 
@@ -23,7 +25,7 @@ def run_usage(usages):
 
             try:
                 exec(s, globals())
-            except:
+            except:  # noqa: E722  (re-raised as a descriptive error)
                 raise Exception("Usage %s failed." % fname)
 
 

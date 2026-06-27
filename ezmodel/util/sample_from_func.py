@@ -1,3 +1,5 @@
+"""Helpers to sample datasets from analytic test functions."""
+
 import numpy as np
 
 

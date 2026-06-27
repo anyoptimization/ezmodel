@@ -1,3 +1,5 @@
+"""Clearing-based selection of well-spread candidate points."""
+
 import numpy as np
 from pymoo.algorithms.moo.nsga2 import RankAndCrowdingSurvival
 from pymoo.core.population import Population
@@ -54,7 +56,7 @@ class FrontwiseSelection(Selection):
             def __init__(self, **kwargs):
                 super().__init__(n_constr=0 if G is None else 1, **kwargs)
 
-        pop = Population.new(index=np.arange(len(F)), F=F)
+        pop = Population.new(index=np.arange(len(F)), F=F)  # type: ignore[arg-type]  # F is provided at call sites
 
         if G is not None:
             pop.set("G", G)
@@ -67,7 +69,7 @@ class FrontwiseSelection(Selection):
     def do(self, rem):
         _rank = self.rank[rem]
         _crowding = self.crowding[rem]
-        I = np.lexsort([-_crowding, _rank])
+        I = np.lexsort([-_crowding, _rank])  # noqa: E741  (I is an index array)
         return rem[I[0]]
 
 
@@ -112,7 +114,7 @@ def aggregate_by_eps_clearing(
             cleared = clearing.select(S)
             D[S] = cleared
 
-    I = np.array(list(D.keys()))
+    I = np.array(list(D.keys()))  # noqa: E741  (I is an index array)
 
     if return_cluster:
         return I, D

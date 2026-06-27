@@ -1,3 +1,5 @@
+"""Tests for model selection."""
+
 from ezmodel.core.factory import ModelFactoryByClazz
 from ezmodel.core.partitioning import merge_and_partition
 from ezmodel.core.selection import ModelSelection

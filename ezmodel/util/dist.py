@@ -1,3 +1,5 @@
+"""Distance utilities (Euclidean distance matrices)."""
+
 import numpy as np
 
 

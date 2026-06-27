@@ -1,3 +1,5 @@
+"""Zero-mean / unit-variance standardization transform."""
+
 import numpy as np
 
 from ezmodel.core.transformation import Transformation

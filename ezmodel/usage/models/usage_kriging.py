@@ -1,3 +1,5 @@
+"""Usage example for the Kriging surrogate model."""
+
 import matplotlib.pyplot as plt
 import numpy as np
 

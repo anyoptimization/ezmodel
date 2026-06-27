@@ -1,3 +1,5 @@
+"""Tests for the regression metrics."""
+
 import numpy as np
 
 from ezmodel.util.metrics import METRICS, calc_metric

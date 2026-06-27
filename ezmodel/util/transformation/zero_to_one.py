@@ -1,3 +1,5 @@
+"""Min-max normalization to the [0, 1] range."""
+
 import numpy as np
 
 from ezmodel.core.transformation import Transformation

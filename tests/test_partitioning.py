@@ -1,3 +1,5 @@
+"""Tests for the data partitioning strategies."""
+
 import numpy as np
 
 from ezmodel.util.partitioning.crossvalidation import CrossvalidationPartitioning

@@ -1,3 +1,5 @@
+"""Random train/test partitioning."""
+
 import math
 
 import numpy as np

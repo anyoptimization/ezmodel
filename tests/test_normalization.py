@@ -1,3 +1,5 @@
+"""Tests for the normalization/standardization transforms."""
+
 import numpy as np
 
 from ezmodel.util.transformation.standardization import Standardization

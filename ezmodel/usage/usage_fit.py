@@ -1,3 +1,5 @@
+"""Usage example: fit and select the best surrogate via ``fit``."""
+
 import matplotlib.pyplot as plt
 import numpy as np
 

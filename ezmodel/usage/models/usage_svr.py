@@ -1,3 +1,5 @@
+"""Usage example for the SVR surrogate model."""
+
 import matplotlib.pyplot as plt
 import numpy as np
 

@@ -1,8 +1,10 @@
+"""GPflow-backed Gaussian process surrogate model (optional dependency)."""
+
 from ezmodel.core.model import Model
 
 try:
     import gpflow
-except:
+except:  # noqa: E722  (optional dependency import guard)
     raise Exception("Model not found. Please execute: 'pip install gpflow'")
 
 

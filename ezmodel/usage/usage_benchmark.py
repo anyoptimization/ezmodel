@@ -1,14 +1,16 @@
+"""Usage example: benchmark several surrogate models."""
+
 import numpy as np
 import pandas as pd
 
 pd.set_option("display.expand_frame_repr", False)
 pd.set_option("max_colwidth", 1000)
 
-from ezmodel.core.benchmark import Benchmark
-from ezmodel.core.factory import models_from_clazzes
-from ezmodel.models.kriging import Kriging
-from ezmodel.models.rbf import RBF
-from ezmodel.util.partitioning.crossvalidation import CrossvalidationPartitioning
+from ezmodel.core.benchmark import Benchmark  # noqa: E402  (imports follow pandas display setup)
+from ezmodel.core.factory import models_from_clazzes  # noqa: E402  (imports follow pandas display setup)
+from ezmodel.models.kriging import Kriging  # noqa: E402  (imports follow pandas display setup)
+from ezmodel.models.rbf import RBF  # noqa: E402  (imports follow pandas display setup)
+from ezmodel.util.partitioning.crossvalidation import CrossvalidationPartitioning  # noqa: E402
 
 X = np.random.random((100, 3)) * 2 * np.pi
 y = np.sin(X).sum(axis=1)

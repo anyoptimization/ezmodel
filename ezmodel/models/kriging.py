@@ -1,3 +1,5 @@
+"""Kriging (Gaussian process) surrogate model."""
+
 import sys
 from inspect import getmembers
 

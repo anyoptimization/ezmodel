@@ -1,3 +1,5 @@
+"""Benchmark that fits and scores multiple surrogate models on the same data."""
+
 import copy
 import warnings
 from multiprocessing.pool import ThreadPool
@@ -19,9 +21,7 @@ class Benchmark:
         n_threads=None,
         verbose=False,
     ):
-        """
-
-        This is a benchmark class which evaluates the performance of surrogates on a data set.
+        """Evaluate the performance of surrogate models on a data set.
 
         Parameters
         ----------
@@ -153,7 +153,7 @@ class Benchmark:
                     if self.verbose:
                         print(record["label"], record["obj"].time)
 
-                except:
+                except:  # noqa: E722  (intentional broad catch around model fit)
                     pass
 
     def _postprocessing(self):
@@ -168,7 +168,7 @@ class Benchmark:
             hash = entry["label"]
             results[hash]["runs"].append(entry)
 
-        collect = lambda k, x: np.array([run[x] for run in results[k]["runs"]])
+        collect = lambda k, x: np.array([run[x] for run in results[k]["runs"]])  # noqa: E731  (compact inline sorter)
 
         # collect the data from all the runs
         for metric in self.metrics:
@@ -238,7 +238,7 @@ class Benchmark:
     def statistics(self, metric="mae", vals=["mean", "std", "min", "max", "median"], sort_by="mean", ascending=True):
         try:
             import pandas as pd
-        except:
+        except:  # noqa: E722  (intentional broad catch around model fit)
             raise Exception("Please install the pandas toolbox for using statistics: pip install pandas")
 
         df = pd.DataFrame(self.records)

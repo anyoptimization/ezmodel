@@ -1,8 +1,10 @@
+"""Random forest surrogate model."""
+
 import numpy as np
 
 try:
     from sklearn.ensemble import RandomForestRegressor
-except:
+except:  # noqa: E722  (optional dependency import guard)
     raise Exception("Model not found. Please execute: 'pip install sklearn'")
 
 from ezmodel.core.model import Model

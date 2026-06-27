@@ -1,3 +1,5 @@
+"""Stochastic tunneling transformation."""
+
 import numpy as np
 
 from ezmodel.core.transformation import Transformation

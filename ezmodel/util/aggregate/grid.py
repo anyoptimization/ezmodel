@@ -1,3 +1,5 @@
+"""Grid-based aggregation of points."""
+
 from ezmodel.util.aggregate.clearing import MinSelection
 from ezmodel.util.misc import discretize
 
@@ -24,7 +26,7 @@ def aggregate_by_grid(
         i = selection(problem=problem, **kwargs).do(group)
         ret[i] = [e for e in group if e != i]
 
-    I = list(ret.keys())
+    I = list(ret.keys())  # noqa: E741  (I is an index array)
 
     if return_cluster:
         return I, ret

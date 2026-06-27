@@ -1,3 +1,5 @@
+"""Top-level ``fit`` entry point that finds the best surrogate for given data."""
+
 from ezmodel.core.benchmark import Benchmark
 from ezmodel.core.factory import models_from_clazzes
 from ezmodel.core.partitioning import merge_and_partition

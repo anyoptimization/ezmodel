@@ -1,6 +1,8 @@
+"""pySOT-backed RBF surrogate model (optional dependency)."""
+
 try:
     from pySOT.surrogate import ConstantTail, CubicKernel, LinearTail, RBFInterpolant, TPSKernel
-except:
+except:  # noqa: E722  (optional dependency import guard)
     raise Exception("Model not found. Please execute: 'pip install pySOT'")
 
 

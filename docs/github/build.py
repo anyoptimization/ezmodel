@@ -1,3 +1,5 @@
+"""Helper script that builds the documentation for GitHub Pages."""
+
 import os
 import re
 

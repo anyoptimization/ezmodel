@@ -1,6 +1,8 @@
+"""GPy-backed Gaussian process surrogate model (optional dependency)."""
+
 try:
     import GPy
-except:
+except:  # noqa: E722  (optional dependency import guard)
     raise Exception("Model not found. Please execute: 'pip install GPy'")
 
 import numpy as np

@@ -30,7 +30,7 @@ project = Project(
     # scratch code) and scratch.py are out of scope and excluded.
     descriptions=DescriptionConfig(
         include=[r"\.py$"],
-        exclude=[r"ezmodel/experimental/", r"tests/scratch\.py$"],
+        exclude=[r"experimental/", r"scratch\.py$"],
     ),
     test=TestConfig(
         tests_dir="tests",

@@ -1,10 +1,12 @@
+"""Polynomial regression surrogate model."""
+
 import numpy as np
 
 try:
     from sklearn.linear_model import LinearRegression
     from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import PolynomialFeatures, StandardScaler
-except:
+except:  # noqa: E722  (optional dependency import guard)
     raise Exception("Model not found. Please execute: 'pip install sklearn'")
 
 from ezmodel.core.model import Model

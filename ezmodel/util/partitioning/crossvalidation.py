@@ -1,3 +1,5 @@
+"""k-fold cross-validation partitioning."""
+
 import random
 
 from ezmodel.core.partitioning import Partitioning

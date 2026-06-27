@@ -1,3 +1,5 @@
+"""Constant-mean baseline surrogate model."""
+
 import numpy as np
 
 from ezmodel.core.model import Model

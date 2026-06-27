@@ -1,3 +1,5 @@
+"""Setuptools packaging script for ezmodel."""
+
 import setuptools
 from setuptools import setup
 

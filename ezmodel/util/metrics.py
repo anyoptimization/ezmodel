@@ -1,3 +1,5 @@
+"""Regression error metrics (mse, mae, r2, spearman)."""
+
 import inspect
 import sys
 

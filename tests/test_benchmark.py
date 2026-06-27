@@ -1,3 +1,5 @@
+"""Tests for the model benchmark."""
+
 from ezmodel.core.benchmark import Benchmark
 from ezmodel.core.factory import ModelFactoryByClazz
 from ezmodel.models.kriging import Kriging

@@ -1,3 +1,5 @@
+"""Inverse distance weighting (IDW) surrogate model."""
+
 from ezmodel.core.model import Model
 from ezmodel.experimental.custom.kernel import dist
 

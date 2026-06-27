@@ -1,3 +1,5 @@
+"""Miscellaneous small helper utilities."""
+
 import numpy as np
 from scipy.spatial.distance import cdist
 
@@ -7,7 +9,7 @@ def all_except(x, *args):
         return x
     else:
         H = set(args) if len(args) > 5 else args
-        I = [k for k in range(len(x)) if k not in H]
+        I = [k for k in range(len(x)) if k not in H]  # noqa: E741  (I is an index array)
         return x[I]
 
 
@@ -19,7 +21,7 @@ def is_duplicate(X, eps=1e-16):
     D = cdist(X, X)
     D[np.triu_indices(len(X))] = np.inf
 
-    I = np.full(len(X), False)
+    I = np.full(len(X), False)  # noqa: E741  (I is an index array)
     I[np.any(D < eps, axis=1)] = True
     return I
 

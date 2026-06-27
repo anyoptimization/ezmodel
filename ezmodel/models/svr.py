@@ -1,8 +1,10 @@
+"""Support vector regression (SVR) surrogate model."""
+
 try:
     from sklearn.pipeline import make_pipeline
     from sklearn.preprocessing import StandardScaler
     from sklearn.svm import SVR as _SVR
-except:
+except:  # noqa: E722  (optional dependency import guard)
     raise Exception("Model not found. Please execute: 'pip install sklearn'")
 
 

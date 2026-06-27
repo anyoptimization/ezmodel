@@ -1,3 +1,5 @@
+"""Radial basis function (RBF) surrogate model."""
+
 import numpy as np
 
 from ezmodel.core.model import Model

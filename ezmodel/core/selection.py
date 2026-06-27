@@ -1,3 +1,5 @@
+"""Model selection: pick the best surrogate via a benchmark over partitions."""
+
 from copy import copy
 
 from ezmodel.core.benchmark import Benchmark

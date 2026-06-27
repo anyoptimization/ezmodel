@@ -1,3 +1,5 @@
+"""Partitioning base class and helpers for splitting data into train/test folds."""
+
 import random
 
 import numpy as np

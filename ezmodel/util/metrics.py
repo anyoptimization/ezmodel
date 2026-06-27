@@ -117,12 +117,16 @@ def r2(y, y_hat):
 
 
 def spear(y, y_hat):
-    """Spearman rank correlation."""
+    """Spearman rank correlation (undefined -> NaN for a constant predictor)."""
+    if np.ptp(y) == 0 or np.ptp(y_hat) == 0:
+        return np.nan
     return spearmanr(y, y_hat).correlation
 
 
 def kendall(y, y_hat):
-    """Kendall's tau rank correlation (robust ordinal agreement)."""
+    """Kendall's tau rank correlation (undefined -> NaN for a constant predictor)."""
+    if np.ptp(y) == 0 or np.ptp(y_hat) == 0:
+        return np.nan
     return kendalltau(y, y_hat).correlation
 
 

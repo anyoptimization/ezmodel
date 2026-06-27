@@ -9,7 +9,6 @@ from ezmodel.core.model import Model
 
 
 class smtKriging(Model):
-
     def __init__(self, theta0=1e-4, **kwargs) -> None:
         super().__init__(**kwargs)
         self.theta0 = theta0
@@ -37,6 +36,4 @@ class smtKriging(Model):
 
     @classmethod
     def hyperparameters(cls):
-        return {
-
-        }
+        return {}

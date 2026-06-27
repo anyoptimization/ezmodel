@@ -16,4 +16,3 @@ def calc_dist(X, Z, func_dist=eucl_dist, **kwargs):
     D = np.reshape(D, (X.shape[0], Z.shape[0]))
 
     return D
-

@@ -6,11 +6,7 @@ from ezmodel.core.partitioning import Partitioning
 
 
 class RandomPartitioning(Partitioning):
-
-    def __init__(self,
-                 perc_train=0.7,
-                 n_sets=1,
-                 **kwargs):
+    def __init__(self, perc_train=0.7, n_sets=1, **kwargs):
         super().__init__(**kwargs)
         self.n_sets = n_sets
         self.perc_train = perc_train

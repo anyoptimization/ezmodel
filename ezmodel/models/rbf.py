@@ -5,15 +5,9 @@ from ezmodel.util.dist import calc_dist
 
 
 class RBF(Model):
-
-    def __init__(self,
-                 kernel="linear",
-                 tail="constant",
-                 sigma=1.0,
-                 rho=1e-6,
-                 normalized=False,
-                 optimize=False,
-                 **kwargs) -> None:
+    def __init__(
+        self, kernel="linear", tail="constant", sigma=1.0, rho=1e-6, normalized=False, optimize=False, **kwargs
+    ) -> None:
 
         super().__init__(eliminate_duplicates=True, eliminate_duplicates_eps=1e-8, **kwargs)
         self.tail = tail
@@ -46,7 +40,6 @@ class RBF(Model):
         rho, tail, kernel, sigma, normalized = self.rho, self.tail, self.kernel, self.sigma, self.normalized
 
         if self.optimize:
-
             sigmas = np.linspace(0.0001, 20, 30)
             models = [rbf_fit(X, y, kernel, sigma=sigma, tail=tail, rho=rho, normalized=normalized) for sigma in sigmas]
             f = np.array([model["loocv"] for model in models])
@@ -91,9 +84,9 @@ def rbf_kernel(X, phi, tail="linear", **kwargs):
     elif tail == "linear":
         P = np.column_stack((np.ones(n), X))
     elif tail == "quadratic":
-        P = np.column_stack((np.ones(n), X ** 2))
+        P = np.column_stack((np.ones(n), X**2))
     elif tail == "linear+quadratic":
-        P = np.column_stack((np.ones(n), X, X ** 2))
+        P = np.column_stack((np.ones(n), X, X**2))
 
     return np.column_stack([phi, P])
 
@@ -111,7 +104,7 @@ def rbf_fit(X, y, func, Xp=None, rho=0.0, normalized=False, **kwargs):
         phi = phi / phi_norm
 
     if rho is not None:
-        phi = phi + np.eye(len(phi)) * (rho ** 2)
+        phi = phi + np.eye(len(phi)) * (rho**2)
 
     K = rbf_kernel(X, phi, **kwargs)
     n, m = K.shape
@@ -128,8 +121,8 @@ def rbf_fit(X, y, func, Xp=None, rho=0.0, normalized=False, **kwargs):
 
     c, K = coef[:n, 0], A_inv[:n, :n]
     e = c / (np.diag(K) + 1e-128)
-    loocv = (e ** 2).sum()
-    gcv = (c ** 2).sum() / (np.diag(K).mean() ** 2)
+    loocv = (e**2).sum()
+    gcv = (c**2).sum() / (np.diag(K).mean() ** 2)
 
     return dict(X=X, cond=cond, e=e, loocv=loocv, gcv=gcv, coef=coef, func=func, phi_norm=phi_norm, kwargs=kwargs)
 
@@ -156,20 +149,20 @@ def kernel_cubic(r, sigma=1.0, **kwargs):
 
 
 def kernel_gaussian(r, sigma=None, **kwargs):
-    return np.exp(- (sigma * r ** 2))
+    return np.exp(-(sigma * r**2))
 
 
 def kernel_periodic(r, sigma=1.0, **kwargs):
-    return (sigma ** 2) * np.exp(- 2 * np.sin((np.pi * r) / 5) ** 2)
+    return (sigma**2) * np.exp(-2 * np.sin((np.pi * r) / 5) ** 2)
 
 
 def kernel_multi_quadr(r, sigma=1.0, **kwargs):
-    return ((r ** 2) + (sigma ** 2)) ** 0.5
+    return ((r**2) + (sigma**2)) ** 0.5
 
 
 def kernel_tps(r, **kwargs):
     r[r < np.finfo(float).eps] = np.finfo(float).eps
-    return (r ** 2) * np.log(r)
+    return (r**2) * np.log(r)
 
 
 def svd_inv(A):
@@ -194,4 +187,4 @@ def calc_loocv(X, y, *args, **kwargs):
 
     e = np.array(e)
 
-    return (e ** 2).sum(), e
+    return (e**2).sum(), e

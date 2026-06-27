@@ -1,18 +1,13 @@
-
 try:
-    from pySOT.surrogate import RBFInterpolant, CubicKernel, LinearTail, TPSKernel, ConstantTail
+    from pySOT.surrogate import ConstantTail, CubicKernel, LinearTail, RBFInterpolant, TPSKernel
 except:
     raise Exception("Model not found. Please execute: 'pip install pySOT'")
-
-
-
 
 
 from ezmodel.core.model import Model
 
 
 class pySOTRBF(Model):
-
     def __init__(self, kernel="cubic", tail="linear", eta=1e-6, **kwargs) -> None:
         super().__init__(**kwargs)
         self.kernel = kernel

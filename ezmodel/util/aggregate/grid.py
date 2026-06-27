@@ -2,14 +2,9 @@ from ezmodel.util.aggregate.clearing import MinSelection
 from ezmodel.util.misc import discretize
 
 
-def aggregate_by_grid(X,
-                      n_partitions,
-                      selection=MinSelection,
-                      return_cluster=False,
-                      problem=None,
-                      xl=None,
-                      xu=None,
-                      **kwargs):
+def aggregate_by_grid(
+    X, n_partitions, selection=MinSelection, return_cluster=False, problem=None, xl=None, xu=None, **kwargs
+):
 
     if problem is not None:
         xl, xu = problem.bounds()

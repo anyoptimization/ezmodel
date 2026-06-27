@@ -1,15 +1,10 @@
-import math
 import random
 
 from ezmodel.core.partitioning import Partitioning
 
 
 class CrossvalidationPartitioning(Partitioning):
-
-    def __init__(self,
-                 k_folds=5,
-                 randomize=True,
-                 **kwargs):
+    def __init__(self, k_folds=5, randomize=True, **kwargs):
 
         super().__init__(**kwargs)
         self.randomize = randomize

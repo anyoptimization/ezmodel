@@ -4,7 +4,6 @@ from ezmodel.core.transformation import Transformation
 
 
 class ZeroToOneNormalization(Transformation):
-
     def __init__(self, xl=None, xu=None, estimate_bounds=True) -> None:
         super().__init__()
         self.xl = xl

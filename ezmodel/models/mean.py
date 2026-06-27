@@ -4,7 +4,6 @@ from ezmodel.core.model import Model
 
 
 class SimpleMean(Model):
-
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
@@ -17,5 +16,3 @@ class SimpleMean(Model):
     @classmethod
     def hyperparameters(cls):
         return {}
-
-

@@ -17,9 +17,7 @@ def run_usage(usages):
         with open(path_to_file) as f:
             s = f.read()
 
-            no_plots = "import matplotlib\n" \
-                       "import matplotlib.pyplot\n" \
-                       "matplotlib.use('Agg')\n"
+            no_plots = "import matplotlib\nimport matplotlib.pyplot\nmatplotlib.use('Agg')\n"
 
             s = no_plots + s + "\nmatplotlib.pyplot.close()\n"
 
@@ -29,9 +27,7 @@ def run_usage(usages):
                 raise Exception("Usage %s failed." % fname)
 
 
-
 @pytest.mark.optional
 def test_usages():
     folder = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "ezmodel", "usage")
-    run_usage([os.path.join(folder, fname) for fname in Path(folder).glob('**/*.py')])
-
+    run_usage([os.path.join(folder, fname) for fname in Path(folder).glob("**/*.py")])

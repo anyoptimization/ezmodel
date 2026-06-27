@@ -3,7 +3,6 @@ from ezmodel.experimental.custom.kernel import dist
 
 
 class InverseDistanceWeighting(Model):
-
     def __init__(self, p=2.0, eps=1e-32, **kwargs) -> None:
         super().__init__(**kwargs)
         self.p = p
@@ -18,10 +17,10 @@ class InverseDistanceWeighting(Model):
         D = dist(X, _X)
         D[D <= self.eps] = self.eps
 
-        w = 1 / D ** self.p
+        w = 1 / D**self.p
 
         for k, d in enumerate(D):
-            is_zero = (d <= self.eps)
+            is_zero = d <= self.eps
             if is_zero.sum() > 0:
                 w[k, ~is_zero] = 0
                 w[k, is_zero] = 1

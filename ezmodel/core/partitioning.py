@@ -4,7 +4,6 @@ import numpy as np
 
 
 class Partitioning:
-
     def __init__(self, seed=None, include_trn_in_test=False) -> None:
         super().__init__()
         self.seed = seed

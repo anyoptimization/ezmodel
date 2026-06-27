@@ -1,9 +1,9 @@
-from ezmodel.core.transformation import Transformation
 import numpy as np
+
+from ezmodel.core.transformation import Transformation
 
 
 class StochasticTunneling(Transformation):
-
     def __init__(self, gamma, y_min=None) -> None:
         super().__init__()
         self.y_min = y_min
@@ -13,7 +13,7 @@ class StochasticTunneling(Transformation):
         if self.y_min is None:
             self.y_min = y.min(axis=0)
 
-        return 1 - np.exp(- self.gamma * (y - self.y_min))
+        return 1 - np.exp(-self.gamma * (y - self.y_min))
 
     def backward(self, yp):
         yp = np.clip(yp, None, 1.0 - 1e-16)

@@ -10,7 +10,6 @@ from ezmodel.util.misc import discretize
 
 
 class RandomForest(Model):
-
     def __init__(self, n_partitions=5, n_estimators=30, xl=None, xu=None, **kwargs) -> None:
         super().__init__(**kwargs)
         self.xl, self.xu = xl, xu
@@ -34,7 +33,7 @@ class RandomForest(Model):
             if s not in D:
                 D[s] = dict(X=x, y=y[i], n=1)
             else:
-                _y, _n = D[s]['y'], D[s]['n']
+                _y, _n = D[s]["y"], D[s]["n"]
                 D[s] = dict(X=x, y=min(_y, y[i]), n=_n + 1)
 
         X = np.zeros((len(D), X.shape[1]))
@@ -53,7 +52,4 @@ class RandomForest(Model):
 
     @classmethod
     def hyperparameters(cls):
-        return {
-            "n_partitions": [20, 50, 100],
-            "n_estimators": [10, 100, 200]
-        }
+        return {"n_partitions": [20, 50, 100], "n_estimators": [10, 100, 200]}

@@ -23,6 +23,7 @@ def calc_metric(metric, y, y_hat):
 # Metrics
 # --------------------------------------------------------------
 
+
 def mse(y, y_hat):
     return np.mean((y - y_hat) ** 2)
 
@@ -43,6 +44,6 @@ def spear(y, y_hat):
 # Util
 # --------------------------------------------------------------
 
+
 def check_equal_shape(a, b):
     assert a.shape == b.shape
-

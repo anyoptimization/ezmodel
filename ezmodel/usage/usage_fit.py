@@ -2,7 +2,6 @@ import matplotlib.pyplot as plt
 import numpy as np
 
 from ezmodel.core.factory import models_from_clazzes
-from ezmodel.core.selection import ModelSelection
 from ezmodel.fit import fit
 from ezmodel.models.kriging import Kriging
 from ezmodel.models.rbf import RBF

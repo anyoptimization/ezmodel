@@ -5,13 +5,13 @@ from ezmodel.core.model import Model
 
 
 class ModelSelection(Model):
-
-    def __init__(self,
-                 benchmark_or_models,
-                 refit=True,
-                 max_trn_error=None,
-                 sorted_by=None,  # for instance ("mse", "mean", True)
-                 ) -> None:
+    def __init__(
+        self,
+        benchmark_or_models,
+        refit=True,
+        max_trn_error=None,
+        sorted_by=None,  # for instance ("mse", "mean", True)
+    ) -> None:
 
         super().__init__()
 
@@ -34,10 +34,9 @@ class ModelSelection(Model):
         if self.benchmark.data is None:
             self.benchmark.do(X, y, *args, **kwargs)
 
-        R = self.benchmark.results(only_successful=True,
-                                   as_list=True,
-                                   sorted_by=self.sorted_by,
-                                   max_trn_error=self.max_trn_error)
+        R = self.benchmark.results(
+            only_successful=True, as_list=True, sorted_by=self.sorted_by, max_trn_error=self.max_trn_error
+        )
 
         if len(R) == 0:
             raise Exception("No model could have been fitted successfully!")
@@ -67,6 +66,7 @@ class ModelSelection(Model):
             return None
         else:
             import pandas as pd
+
             data = [(e["label"], e["metric"]) for e in self.data]
             df = pd.DataFrame(data, columns=["label", self.metric])
             return df

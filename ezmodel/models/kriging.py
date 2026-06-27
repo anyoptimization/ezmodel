@@ -22,15 +22,9 @@ def get_regr(corr):
 
 
 class Kriging(Model):
-
-    def __init__(self,
-                 regr="linear",
-                 corr="gauss",
-                 ARD=False,
-                 theta=1.0,
-                 thetaL=0.00001,
-                 thetaU=100.0,
-                 **kwargs) -> None:
+    def __init__(
+        self, regr="linear", corr="gauss", ARD=False, theta=1.0, thetaL=0.00001, thetaU=100.0, **kwargs
+    ) -> None:
 
         super().__init__(eliminate_duplicates=True, **kwargs)
         self.regr = regr
@@ -78,5 +72,5 @@ class Kriging(Model):
             "regr": ["constant", "linear"],
             "corr": ["gauss", "cubic", "exp"],
             "thetaU": [20, 100],
-            "ARD": [False, True]
+            "ARD": [False, True],
         }

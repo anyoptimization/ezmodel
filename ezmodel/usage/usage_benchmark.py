@@ -1,8 +1,8 @@
 import numpy as np
-
 import pandas as pd
-pd.set_option('display.expand_frame_repr', False)
-pd.set_option('max_colwidth', 1000)
+
+pd.set_option("display.expand_frame_repr", False)
+pd.set_option("max_colwidth", 1000)
 
 from ezmodel.core.benchmark import Benchmark
 from ezmodel.core.factory import models_from_clazzes

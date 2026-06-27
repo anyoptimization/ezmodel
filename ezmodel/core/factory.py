@@ -5,14 +5,12 @@ from ezmodel.util.misc import dict_to_str
 
 
 class ModelFactory:
-
     @abstractmethod
     def do(self):
         pass
 
 
 class ModelFactoryByClazz(ModelFactory):
-
     def __init__(self, clazz, params=None, create_instance=True, **kwargs) -> None:
         super().__init__()
         self.clazz = clazz

@@ -4,7 +4,6 @@ from ezmodel.core.transformation import Transformation
 
 
 class Standardization(Transformation):
-
     def __init__(self, mean=None, std=None) -> None:
         super().__init__()
         self.mean = mean
@@ -22,4 +21,3 @@ class Standardization(Transformation):
 
     def backward(self, X):
         return (X * self.std) + self.mean
-

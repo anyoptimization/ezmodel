@@ -1,15 +1,13 @@
 import numpy as np
-
 from pymoo.algorithms.moo.nsga2 import RankAndCrowdingSurvival
 from pymoo.core.population import Population
 from pymoo.core.problem import Problem
 from pymoo.util.clearing import EpsilonClearing
-from pymoo.util.misc import vectorized_cdist, norm_eucl_dist_by_bounds
+from pymoo.util.misc import norm_eucl_dist_by_bounds, vectorized_cdist
 from pymoo.util.nds.non_dominated_sorting import NonDominatedSorting
 
 
 class Selection:
-
     def __init__(self, **kwargs) -> None:
         super().__init__()
         for k, v in kwargs.items():
@@ -17,19 +15,16 @@ class Selection:
 
 
 class MinSelection(Selection):
-
     def do(self, rem):
         return rem[self.F[rem].argmin()]
 
 
 class RandomSelection(Selection):
-
     def do(self, rem):
         return rem[np.random.randint(len(rem))]
 
 
 class MinMaxSelection(Selection):
-
     def __init__(self, min_eps=0.01, **kwargs) -> None:
         super().__init__(min_eps=min_eps, **kwargs)
 
@@ -49,7 +44,6 @@ class MinMaxSelection(Selection):
 
 
 class FrontwiseSelection(Selection):
-
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
@@ -73,21 +67,23 @@ class FrontwiseSelection(Selection):
     def do(self, rem):
         _rank = self.rank[rem]
         _crowding = self.crowding[rem]
-        I = np.lexsort([- _crowding, _rank])
+        I = np.lexsort([-_crowding, _rank])
         return rem[I[0]]
 
 
-def aggregate_by_eps_clearing(X,
-                              eps,
-                              selection=MinSelection,
-                              return_cluster=False,
-                              func_dist=vectorized_cdist,
-                              func_dist_by_bounds=norm_eucl_dist_by_bounds,
-                              calc_distance=True,
-                              problem=None,
-                              xl=None,
-                              xu=None,
-                              **kwargs):
+def aggregate_by_eps_clearing(
+    X,
+    eps,
+    selection=MinSelection,
+    return_cluster=False,
+    func_dist=vectorized_cdist,
+    func_dist_by_bounds=norm_eucl_dist_by_bounds,
+    calc_distance=True,
+    problem=None,
+    xl=None,
+    xu=None,
+    **kwargs,
+):
     if calc_distance:
         if problem is None:
             D = func_dist(X, X)

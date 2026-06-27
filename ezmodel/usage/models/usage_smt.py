@@ -1,6 +1,6 @@
-
 import matplotlib.pyplot as plt
 import numpy as np
+
 from ezmodel.models.smt import smtKriging
 from ezmodel.util.metrics import calc_metric
 from ezmodel.util.sample_from_func import sine_function
@@ -25,4 +25,3 @@ plt.scatter(X, y, label="Data")
 plt.plot(_X, y_hat, color="black", label="RBF")
 plt.legend()
 plt.show()
-

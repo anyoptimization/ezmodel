@@ -2,7 +2,6 @@ from abc import abstractmethod
 
 
 class Transformation:
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -16,7 +15,6 @@ class Transformation:
 
 
 class NoNormalization(Transformation):
-
     def __init__(self) -> None:
         super().__init__()
 

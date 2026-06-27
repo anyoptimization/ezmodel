@@ -4,9 +4,7 @@ import numpy as np
 from ezmodel.models.kriging import Kriging
 from ezmodel.util.sample_from_func import square_function
 
-model = Kriging(regr="linear",
-                corr="gauss",
-                ARD=False)
+model = Kriging(regr="linear", corr="gauss", ARD=False)
 
 # create some data to test this model on
 X, y, _X, _y = square_function(100, 20)
@@ -25,4 +23,3 @@ plt.scatter(X, y, label="Data")
 plt.plot(_X, y_hat, color="black", label="RBF")
 plt.legend()
 plt.show()
-

@@ -24,7 +24,6 @@ def test_crossvalidation_selection():
 
     assert len(partitions) == 5
     for k, (train, test) in enumerate(partitions):
-
         assert len(train) == 80
         assert len(test) == 20
 

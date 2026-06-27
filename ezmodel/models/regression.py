@@ -11,7 +11,6 @@ from ezmodel.core.model import Model
 
 
 class PolynomialRegression(Model):
-
     def __init__(self, degree=3, fail_if_not_enough_points=True, **kwargs) -> None:
         super().__init__(**kwargs)
         self.degree = degree
@@ -34,6 +33,4 @@ class PolynomialRegression(Model):
 
     @classmethod
     def hyperparameters(cls):
-        return {
-            "degree": np.arange(1, 4)
-        }
+        return {"degree": np.arange(1, 4)}

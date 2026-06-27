@@ -7,17 +7,18 @@ from ezmodel.models.rbf import RBF
 
 
 def fit(
-        X,
-        y,
-        X_test=None,
-        y_test=None,
-        partitions=None,
-        clazzes=[Kriging, RBF],
-        defaults={},
-        models=None,
-        return_benchmark=False,
-        return_selection=False,
-        **kwargs):
+    X,
+    y,
+    X_test=None,
+    y_test=None,
+    partitions=None,
+    clazzes=[Kriging, RBF],
+    defaults={},
+    models=None,
+    return_benchmark=False,
+    return_selection=False,
+    **kwargs,
+):
     """
 
     Find the best out of a variety of surrogates regarding a metric.
@@ -53,7 +54,6 @@ def fit(
 
     Returns
     -------
-
     model : Model
         The best model found on the data.
 
@@ -62,12 +62,10 @@ def fit(
 
 
     """
-
     if X_test is not None and y_test is not None:
         X, y, partitions = merge_and_partition((X, y), (X_test, y_test))
         refit = False
     else:
-
         # by default just do cross validation
         if partitions is None:
             raise Exception("Either provide partitions or a test set.")

@@ -7,16 +7,14 @@ except:
 
 
 class GPFlow(Model):
-
     def __init__(self, **kwargs) -> None:
         super().__init__(**kwargs)
 
     def _fit(self, X, y, **kwargs):
         kernel = gpflow.kernels.SquaredExponential()
-        m = gpflow.models.GPR(data=(X, y),
-                              kernel=kernel,
-                              mean_function=gpflow.mean_functions.Constant(),
-                              noise_variance=1e-03)
+        m = gpflow.models.GPR(
+            data=(X, y), kernel=kernel, mean_function=gpflow.mean_functions.Constant(), noise_variance=1e-03
+        )
 
         opt = gpflow.optimizers.Scipy()
         opt.minimize(m.training_loss, m.trainable_variables, options=dict(maxiter=100))

@@ -1,9 +1,7 @@
 import matplotlib.pyplot as plt
 import numpy as np
 
-from ezmodel.models.mean import SimpleMean
 from ezmodel.models.svr import SVR
-
 from ezmodel.util.sample_from_func import sine_function
 
 svm = SVR()

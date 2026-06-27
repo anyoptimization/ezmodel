@@ -24,8 +24,7 @@ def get_kernel(name, n_var, ARD):
 
 
 class gpyGP(Model):
-
-    def __init__(self, kernel="matern52", ARD=False, optimizer='lbfgs', **kwargs) -> None:
+    def __init__(self, kernel="matern52", ARD=False, optimizer="lbfgs", **kwargs) -> None:
         super().__init__(**kwargs)
         self.kernel = kernel
         self.ARD = ARD
@@ -35,20 +34,17 @@ class gpyGP(Model):
         kernel = get_kernel(self.kernel, X.shape[1], self.ARD)
         model = GPy.models.GPRegression(X, y, kernel, normalizer=True)
 
-        model.constrain_positive('')
+        model.constrain_positive("")
         (kern_variance, kern_lengthscale, gaussian_noise) = model.parameter_names()
 
         model[kern_variance].constrain_bounded(1e-6, 1e6, warning=False)
         model[kern_lengthscale].constrain_bounded(1e-6, 1e6, warning=False)
         model[gaussian_noise].constrain_fixed(1e-6, warning=False)
 
-        if self.optimizer == 'lbfgs':
-            model.optimize_restarts(optimizer='lbfgs',
-                                    num_restarts=10,
-                                    num_processes=1,
-                                    verbose=False)
-        elif self.optimizer == 'ga':
-            model.optimize(optimizer='ga')
+        if self.optimizer == "lbfgs":
+            model.optimize_restarts(optimizer="lbfgs", num_restarts=10, num_processes=1, verbose=False)
+        elif self.optimizer == "ga":
+            model.optimize(optimizer="ga")
         else:
             raise Exception("Unknown Optimizer!")
 

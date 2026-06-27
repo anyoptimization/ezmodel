@@ -17,5 +17,3 @@ def test_benchmark():
     vals = benchmark.statistics()
 
     assert vals is not None
-
-

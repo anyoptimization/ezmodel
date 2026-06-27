@@ -3,22 +3,23 @@ import time
 import numpy as np
 
 from ezmodel.core.transformation import NoNormalization
-from ezmodel.util.misc import is_duplicate, at_least2d
+from ezmodel.util.misc import at_least2d, is_duplicate
 
 
 class Model:
-
-    def __init__(self,
-                 norm_X=NoNormalization(),
-                 norm_y=NoNormalization(),
-                 active_dims=None,
-                 filter_nan_and_inf=True,
-                 eliminate_duplicates=False,
-                 eliminate_duplicates_eps=1e-16,
-                 raise_exception_while_fitting=True,
-                 raise_exception_while_prediction=True,
-                 verbose=False,
-                 **kwargs):
+    def __init__(
+        self,
+        norm_X=NoNormalization(),
+        norm_y=NoNormalization(),
+        active_dims=None,
+        filter_nan_and_inf=True,
+        eliminate_duplicates=False,
+        eliminate_duplicates_eps=1e-16,
+        raise_exception_while_fitting=True,
+        raise_exception_while_prediction=True,
+        verbose=False,
+        **kwargs,
+    ):
 
         self.norm_X = norm_X
         self.norm_y = norm_y
@@ -78,7 +79,6 @@ class Model:
         start = time.time()
 
         try:
-
             # fit the model given the data
             self._fit(self.X, self.y, **kwargs)
 
@@ -99,10 +99,7 @@ class Model:
 
         return self
 
-    def predict(self, X,
-                return_values_of=["y"],
-                return_as_dictionary=False,
-                **kwargs):
+    def predict(self, X, return_values_of=["y"], return_as_dictionary=False, **kwargs):
 
         if not self.success:
             if self.raise_exception_while_fitting:

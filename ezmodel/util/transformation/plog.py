@@ -4,7 +4,6 @@ from ezmodel.core.transformation import Transformation
 
 
 class Plog(Transformation):
-
     def __init__(self) -> None:
         super().__init__()
 
@@ -13,7 +12,7 @@ class Plog(Transformation):
 
         larger = y >= 0
         yp[larger] = np.log(1 + y[larger])
-        yp[~larger] = - np.log(1 - y[~larger])
+        yp[~larger] = -np.log(1 - y[~larger])
 
         return yp
 

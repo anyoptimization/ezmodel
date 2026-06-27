@@ -10,12 +10,12 @@ from pyclawd import (
 )
 
 project = Project(
-    name='ezmodel',
+    name="ezmodel",
     conda_env=None,
     root_markers=["setup.py", "ezmodel/__init__.py"],
     # The pyclawd this config was built on. `pyclawd doctor` WARNs if the
     # running pyclawd has drifted to a different minor (migration may be needed).
-    pyclawd_version='0.1.0',
+    pyclawd_version="0.1.0",
     # Default directory `pyclawd ls` lists (the code/source root).
     src_dir="ezmodel",
     quality=QualityConfig(
@@ -33,7 +33,7 @@ project = Project(
         exclude=[r"ezmodel/experimental/", r"tests/scratch\.py$"],
     ),
     test=TestConfig(
-        tests_dir='tests',
+        tests_dir="tests",
         classname_prefix="tests.",
         integration_files=[],
         # default tier is the env-portable gate: excludes optional-backend usage

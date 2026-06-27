@@ -14,4 +14,3 @@ def test_selection():
     model = ModelSelection(models, refit=False).do(X, y, partitions=partitions)
 
     assert model is not None
-

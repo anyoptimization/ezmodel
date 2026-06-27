@@ -10,15 +10,15 @@ from ezmodel.util.partitioning.crossvalidation import CrossvalidationPartitionin
 
 
 class Benchmark:
-
-    def __init__(self,
-                 models,
-                 metrics=["mse", "mae", "r2", "spear"],
-                 show_warnings=False,
-                 raise_exception=False,
-                 n_threads=None,
-                 verbose=False):
-
+    def __init__(
+        self,
+        models,
+        metrics=["mse", "mae", "r2", "spear"],
+        show_warnings=False,
+        raise_exception=False,
+        n_threads=None,
+        verbose=False,
+    ):
         """
 
         This is a benchmark class which evaluates the performance of surrogates on a data set.
@@ -46,7 +46,6 @@ class Benchmark:
             Whether the benchmark should provide printouts or not.
 
         """
-
         super().__init__()
         self.models = dict(models)
 
@@ -96,7 +95,6 @@ class Benchmark:
 
         # create all the entries each of them representing a job for fitting a model - for each partition
         for k in range(len(partitions)):
-
             # for each model to be tested
             for _, entry in self.models.items():
                 model = entry["model"]
@@ -123,9 +121,9 @@ class Benchmark:
             ret = [fit(self.data, entry, self.show_warnings, self.raise_exception) for entry in self.records]
         else:
             with ThreadPool(self.n_threads) as pool:
-                ret = pool.starmap(fit,
-                                   [(self.data, entry, self.show_warnings, self.raise_exception) for entry in
-                                    self.records])
+                ret = pool.starmap(
+                    fit, [(self.data, entry, self.show_warnings, self.raise_exception) for entry in self.records]
+                )
         return ret
 
     def _performance(self):
@@ -135,7 +133,6 @@ class Benchmark:
 
         # now set the results based on the predictions
         for record in self.records:
-
             # set all metrics to none which ensures they are set if an error occurs
             record["trn_error"] = np.nan
             for metric in self.metrics:
@@ -143,9 +140,7 @@ class Benchmark:
 
             # if the model was fitted successfully
             if record["success"]:
-
                 try:
-
                     trn, tst = partitions[record["partition"]]
                     y_hat, trn_y_hat = record["y_hat"], record["trn_y_hat"]
 
@@ -179,8 +174,9 @@ class Benchmark:
         for metric in self.metrics:
             for k, v in results.items():
                 vals = collect(k, metric)
-                v["performance"][metric] = dict(mean=vals.mean(), std=vals.std(), min=vals.min(), max=vals.max(),
-                                                values=vals)
+                v["performance"][metric] = dict(
+                    mean=vals.mean(), std=vals.std(), min=vals.min(), max=vals.max(), values=vals
+                )
 
         for k, v in results.items():
             v["n_runs"] = len(v["runs"])
@@ -189,13 +185,15 @@ class Benchmark:
 
         self.records_by_model = results
 
-    def results(self,
-                only_successful=True,
-                as_list=True,
-                sorted_by=None,
-                max_trn_error=None,
-                include_metadata=False,
-                include_records=False):
+    def results(
+        self,
+        only_successful=True,
+        as_list=True,
+        sorted_by=None,
+        max_trn_error=None,
+        include_metadata=False,
+        include_records=False,
+    ):
 
         ret = {}
         for k, v in self.records_by_model.items():
@@ -207,7 +205,6 @@ class Benchmark:
 
         # if not a list should be returned that's it
         if as_list:
-
             # otherwise get a list and do some additionally work
             ret = list(ret.values())
 
@@ -222,7 +219,6 @@ class Benchmark:
 
             # filter out solutions with too much error on training set (for approximation models)
             if max_trn_error is not None:
-
                 is_valid = [e["trn_error"] < max_trn_error for e in ret]
 
                 if not any(is_valid):
@@ -239,7 +235,7 @@ class Benchmark:
 
         return ret
 
-    def statistics(self, metric="mae", vals=['mean', 'std', 'min', 'max', 'median'], sort_by="mean", ascending=True):
+    def statistics(self, metric="mae", vals=["mean", "std", "min", "max", "median"], sort_by="mean", ascending=True):
         try:
             import pandas as pd
         except:
@@ -264,6 +260,7 @@ class Benchmark:
             preds[model] = np.concatenate([run["y_hat"] for run in self.data[model]["runs"]])
 
         import pandas as pd
+
         return pd.DataFrame(preds).corr()
 
 
@@ -271,9 +268,9 @@ class Benchmark:
 # Util
 # ----------------------------------------------------------------
 
+
 def fit(data, record, show_warning, raise_exception):
     try:
-
         X, y, partitions = data["X"], data["y"], data["partitions"]
 
         # get the data to be used for evaluation

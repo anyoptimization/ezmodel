@@ -10,6 +10,10 @@ from ezmodel.core.model import Model
 
 
 def get_corr(corr):
+    # allow passing a ready-made kernel instance (e.g. RationalQuadratic(alpha=0.25))
+    # directly, not just a name to look up in pydacefit.corr
+    if callable(corr):
+        return corr
     for name, func in getmembers(sys.modules["pydacefit.corr"]):
         if name == "corr_" + corr:
             return func
@@ -72,7 +76,7 @@ class Kriging(Model):
     def hyperparameters(cls):
         return {
             "regr": ["constant", "linear"],
-            "corr": ["gauss", "cubic", "exp"],
+            "corr": ["gauss", "cubic", "exp", "rq"],
             "thetaU": [20, 100],
             "ARD": [False, True],
         }

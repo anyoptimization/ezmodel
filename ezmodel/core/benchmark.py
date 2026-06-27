@@ -6,7 +6,7 @@ from multiprocessing.pool import ThreadPool
 
 import numpy as np
 
-from ezmodel.util.metrics import calc_metric
+from ezmodel.util.metrics import POINT_METRICS, calc_metric, greater_is_better
 from ezmodel.util.misc import at_least2d
 from ezmodel.util.partitioning.crossvalidation import CrossvalidationPartitioning
 
@@ -15,7 +15,7 @@ class Benchmark:
     def __init__(
         self,
         models,
-        metrics=["mse", "mae", "r2", "spear"],
+        metrics=None,
         show_warnings=False,
         raise_exception=False,
         n_threads=None,
@@ -56,7 +56,8 @@ class Benchmark:
             self.models[k]["label"] = k
 
         # the metrics to be used to evaluate the performance of each model
-        self.metrics = metrics
+        # (default: the holistic point-prediction set — accuracy, fit, ranking, selection)
+        self.metrics = list(POINT_METRICS) if metrics is None else metrics
 
         # whether warnings shall be displayed
         self.show_warnings = show_warnings
@@ -200,7 +201,7 @@ class Benchmark:
             if not only_successful or v["success"]:
                 ret[k] = v
                 if sorted_by is not None:
-                    metric, value, _ = sorted_by
+                    metric, value = sorted_by[0], sorted_by[1]
                     v["metric"] = v["performance"][metric][value]
 
         # if not a list should be returned that's it
@@ -209,7 +210,9 @@ class Benchmark:
             ret = list(ret.values())
 
             if sorted_by is not None:
-                metric, value, ascending = sorted_by
+                # (metric, value) infers direction from the metric; (metric, value, ascending) forces it
+                metric, value = sorted_by[0], sorted_by[1]
+                ascending = sorted_by[2] if len(sorted_by) > 2 else not greater_is_better(metric)
 
                 # sort the indices by their performance
                 sign = 1 if ascending else -1

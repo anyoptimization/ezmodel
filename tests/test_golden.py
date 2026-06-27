@@ -4,6 +4,7 @@ import numpy as np
 import pytest
 
 from ezmodel.models.idw import InverseDistanceWeighting
+from ezmodel.models.kriging import Kriging
 from ezmodel.models.rbf import RBF
 from ezmodel.util.metrics import METRICS, calc_metric
 from ezmodel.util.transformation.standardization import Standardization
@@ -38,6 +39,21 @@ def test_rbf_predict_golden(kernel):
     """RBF predictions on a fixed dataset must not move across refactors."""
     X, y, X_test = _dataset()
     model = RBF(kernel=kernel, tail="linear").fit(X, y)
+    return model.predict(X_test).flatten()
+
+
+# cubic is omitted: it goes non-positive-definite during pydacefit's theta search on
+# this data and raises in Cholesky (a pydacefit robustness bug, not an ezmodel change).
+@pytest.mark.golden
+@pytest.mark.parametrize(
+    "corr",
+    ["gauss", "exp", "rq"],
+    ids=["gauss", "exp", "rq"],
+)
+def test_kriging_predict_golden(corr):
+    """Kriging predictions per correlation kernel (incl. the new ``rq``) must not move."""
+    X, y, X_test = _dataset()
+    model = Kriging(corr=corr).fit(X, y)
     return model.predict(X_test).flatten()
 
 

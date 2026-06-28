@@ -4,6 +4,7 @@ import time
 
 import numpy as np
 
+from ezmodel.core.prediction import Prediction
 from ezmodel.core.transformation import NoNormalization
 from ezmodel.util.misc import at_least2d, is_duplicate
 
@@ -65,11 +66,9 @@ class Model:
 
         return X, y
 
-    def postprocess(self, out, **kwargs):
-        if "y" in out:
-            out["y"] = self.norm_y.backward(out["y"])
-        out = self._postprocess(out, **kwargs)
-        return out
+    def postprocess(self, pred):
+        pred = Prediction(y=self.norm_y.backward(pred.y), sigma=pred.sigma, grad=pred.grad)
+        return self._postprocess(pred)
 
     def fit(self, X, y, **kwargs):
         X, y = at_least2d(X, expand="r"), at_least2d(y, expand="c")
@@ -101,55 +100,58 @@ class Model:
 
         return self
 
-    def predict(self, X, return_values_of=["y"], return_as_dictionary=False, **kwargs):
+    def predict(self, X, sigma=False, grad=False):
+        """Predict the mean (and optionally standard deviation/gradient) for ``X``.
+
+        Args:
+            X: Query points, shape ``(m, d)``.
+            sigma: Also return the predictive standard deviation (``Prediction.sigma``).
+            grad: Also return the gradient of the mean w.r.t. ``X`` (``Prediction.grad``).
+
+        Returns:
+            A :class:`~ezmodel.core.prediction.Prediction` whose ``y`` is always set;
+            ``sigma``/``grad`` are populated only when their flag is requested (and the
+            model supports them, else ``None``).
+
+        Note:
+            ``sigma`` and ``grad`` are returned in the model's output space and are only
+            un-normalized for the default ``norm_y=NoNormalization`` (which every
+            uncertainty-providing model uses). With a non-identity ``norm_y`` only ``y``
+            is back-transformed; ``sigma``/``grad`` would need its scale/Jacobian.
+        """
+        q = self._y.shape[1] if self._y is not None else 1
 
         if not self.success:
             if self.raise_exception_while_fitting:
                 raise Exception("There was an error while fitting the model.")
             else:
-                return np.full(len(X), np.nan)
+                return Prediction(y=np.full((len(X), q), np.nan))
 
-        if self.active_dims is not None:
-            X = X[:, self.active_dims]
-
-        # normalize the input
-        X = self.norm_X.forward(at_least2d(X, expand="r"))
-
-        # write in the output dictionary what should be returned
-        out = {}
-        for k in return_values_of:
-            out[k] = None
+        Xq = X[:, self.active_dims] if self.active_dims is not None else X
+        Xq = self.norm_X.forward(at_least2d(Xq, expand="r"))
 
         try:
-            # get the prediction from the actual implementation
-            self._predict(X, out, **kwargs)
-
-            # do the post processing of the outputs
-            out = self.postprocess(out, **kwargs)
-
+            pred = self._predict(Xq, sigma=sigma, grad=grad)
+            pred = self.postprocess(pred)
         except Exception as e:
             if self.raise_exception_while_prediction:
                 raise e
             else:
-                out["y"] = np.full(len(X), np.inf)
+                pred = Prediction(y=np.full((len(X), q), np.inf))
 
-        if return_as_dictionary:
-            return out
-        else:
-            ret = tuple([out[v] for v in return_values_of])
-            return ret if len(ret) > 1 else ret[0]
+        return pred
 
     def _preprocess(self, X, y, **kwargs):
         return X, y
 
-    def _postprocess(self, out, **kwargs):
-        return out
+    def _postprocess(self, pred):
+        return pred
 
     def _fit(self, X, y, **kwargs):
         pass
 
-    def _predict(self, X, out, **kwargs):
-        pass
+    def _predict(self, X, sigma=False, grad=False):
+        raise NotImplementedError
 
     def _optimize(self, **kwargs):
         pass

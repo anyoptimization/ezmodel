@@ -7,6 +7,7 @@ except:  # noqa: E722  (optional dependency import guard)
 
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 
 
 class pySOTRBF(Model):
@@ -22,8 +23,8 @@ class pySOTRBF(Model):
         self.model = RBFInterpolant(dim=m, kernel=kernel, tail=tail, eta=self.eta)
         self.model.add_points(X, y)
 
-    def _predict(self, X, out):
-        out["y"] = self.model.predict(X)
+    def _predict(self, X, sigma=False, grad=False):
+        return Prediction(y=self.model.predict(X))
 
 
 def get_kernel(kernel):

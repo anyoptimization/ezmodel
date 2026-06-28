@@ -1,6 +1,9 @@
 """GPflow-backed Gaussian process surrogate model (optional dependency)."""
 
+import numpy as np
+
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 
 try:
     import gpflow
@@ -22,9 +25,7 @@ class GPFlow(Model):
         opt.minimize(m.training_loss, m.trainable_variables, options=dict(maxiter=100))
         self.model = m
 
-    def _predict(self, X, out, **kwargs):
+    def _predict(self, X, sigma=False, grad=False):
         mean, var = self.model.predict_f(X)
-
-        out["y"] = mean.numpy()
-        if "var" in out:
-            out["var"] = var.numpy()
+        std = np.sqrt(np.clip(var.numpy(), 0.0, None)) if sigma else None
+        return Prediction(y=mean.numpy(), sigma=std)

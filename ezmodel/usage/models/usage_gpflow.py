@@ -15,11 +15,11 @@ X, y, _X, _y = sine_function(4, 200)
 gp.fit(X, y)
 
 # predict the data using the model
-y_hat = gp.predict(_X)
+y_hat = gp.predict(_X).y
 
 # predict the data using the model
 _X = _X[np.argsort(_X[:, 0])]
-y_hat = gp.predict(_X)
+y_hat = gp.predict(_X).y
 
 plt.scatter(X, y, label="Data")
 plt.plot(_X, y_hat, color="black", label="GPY")

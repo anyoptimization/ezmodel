@@ -8,6 +8,7 @@ except:  # noqa: E722  (optional dependency import guard)
     raise Exception("Model not found. Please execute: 'pip install smt'")
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 
 
 class smtKriging(Model):
@@ -24,14 +25,7 @@ class smtKriging(Model):
 
         self.model = sm
 
-    def _predict(self, X, out, **kwargs):
-
-        if "y" in out:
-            out["y"] = self.model.predict_values(X)
-
-        if "sigma" in out:
-            var = self.model.predict_variances(X)
-
-            var[var <= 0] = 0
-            out["var"] = var
-            out["sigma"] = np.sqrt(var)
+    def _predict(self, X, sigma=False, grad=False):
+        y = self.model.predict_values(X)
+        std = np.sqrt(np.clip(self.model.predict_variances(X), 0.0, None)) if sigma else None
+        return Prediction(y=y, sigma=std)

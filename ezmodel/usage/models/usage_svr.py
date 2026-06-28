@@ -16,11 +16,11 @@ X, y, _X, _y = sine_function(20, 200)
 svm.fit(X, y)
 
 # predict the data using the model
-y_hat = svm.predict(_X)
+y_hat = svm.predict(_X).y
 
 # predict the data using the model
 _X = _X[np.argsort(_X[:, 0])]
-y_hat = svm.predict(_X)
+y_hat = svm.predict(_X).y
 
 plt.scatter(X, y, label="Data")
 plt.plot(_X, y_hat, color="black", label="GPy")

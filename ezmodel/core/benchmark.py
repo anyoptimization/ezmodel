@@ -241,13 +241,14 @@ class Benchmark:
         return tbl
 
     def correlation(self, models=None):
+        by_model = self.records_by_model
 
         if models is None:
-            models = [model for model, vals in self.data.items() if vals["success"]]
+            models = [model for model, vals in by_model.items() if vals["success"]]
 
         preds = {}
         for model in models:
-            preds[model] = np.concatenate([run["y_hat"] for run in self.data[model]["runs"]])
+            preds[model] = np.concatenate([run["y_hat"] for run in by_model[model]["runs"]])
 
         import pandas as pd
 
@@ -269,8 +270,8 @@ def fit(data, record, show_warning, raise_exception):
         model = copy.deepcopy(record["proto"])
         model.fit(X[trn], y[trn])
 
-        trn_y_hat = model.predict(X[trn])
-        tst_y_hat = model.predict(X[tst])
+        trn_y_hat = model.predict(X[trn]).y
+        tst_y_hat = model.predict(X[tst]).y
 
         # set the required entries including the prediction from the model
         record["trn_y_hat"] = trn_y_hat[:, 0]

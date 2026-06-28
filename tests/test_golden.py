@@ -41,7 +41,7 @@ def test_rbf_predict_golden(kernel):
     """RBF predictions on a fixed dataset must not move across refactors."""
     X, y, X_test = _dataset()
     model = RBF(kernel=kernel, tail="linear").fit(X, y)
-    return model.predict(X_test).flatten()
+    return model.predict(X_test).y.flatten()
 
 
 # cubic is omitted: it goes non-positive-definite during pydacefit's theta search on
@@ -58,7 +58,7 @@ def test_kriging_predict_golden(corr):
     # pin the trend explicitly: the baseline was recorded under a linear trend, so it
     # must not silently shift if the Kriging default regr changes (constant vs linear).
     model = Kriging(regr=LinearRegression(), corr=corr).fit(X, y)
-    return model.predict(X_test).flatten()
+    return model.predict(X_test).y.flatten()
 
 
 @pytest.mark.golden
@@ -66,7 +66,7 @@ def test_idw_predict_golden():
     """IDW predictions on a fixed dataset must not move across refactors."""
     X, y, X_test = _dataset()
     model = InverseDistanceWeighting().fit(X, y)
-    return model.predict(X_test).flatten()
+    return model.predict(X_test).y.flatten()
 
 
 @pytest.mark.golden

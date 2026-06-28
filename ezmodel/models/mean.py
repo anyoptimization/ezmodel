@@ -3,6 +3,7 @@
 import numpy as np
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 
 
 class SimpleMean(Model):
@@ -12,5 +13,5 @@ class SimpleMean(Model):
     def _fit(self, _, y, **kwargs):
         self.model = np.mean(y, axis=0)
 
-    def _predict(self, X, out):
-        out["y"] = np.full((len(X), 1), self.model)
+    def _predict(self, X, sigma=False, grad=False):
+        return Prediction(y=np.full((len(X), 1), self.model))

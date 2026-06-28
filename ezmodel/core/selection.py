@@ -66,12 +66,13 @@ class ModelSelection(Model):
     def statistics(self):
         if self.data is None:
             return None
-        else:
-            import pandas as pd
 
-            data = [(e["label"], e["metric"]) for e in self.data]
-            df = pd.DataFrame(data, columns=["label", self.metric])
-            return df
+        import pandas as pd
+
+        # name the score column after the metric used for ranking (sorted_by), or mae
+        metric, value = (self.sorted_by[0], self.sorted_by[1]) if self.sorted_by else ("mae", "mean")
+        rows = [(e["label"], e["performance"][metric][value]) for e in self.data]
+        return pd.DataFrame(rows, columns=["label", metric])
 
     def fit(self, X, y, **kwargs):
         if self.model is None:
@@ -80,5 +81,5 @@ class ModelSelection(Model):
             self.model.fit(X, y, **kwargs)
         return self.model
 
-    def predict(self, X, **kwargs):
-        return self.model.predict(X, **kwargs)
+    def predict(self, X, sigma=False, grad=False):
+        return self.model.predict(X, sigma=sigma, grad=grad)

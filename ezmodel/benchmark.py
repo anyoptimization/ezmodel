@@ -67,15 +67,14 @@ def _sample(n, xl, xu, rng, method):
 def _predict_with_sigma(model, X):
     """Predict means and, if the model exposes it, predictive sigma; else ``(y_hat, None)``."""
     try:
-        out = model.predict(X, return_values_of=["y", "sigma"], return_as_dictionary=True)
-        y_hat = np.asarray(out["y"]).flatten()
-        sigma = out.get("sigma")
-        sigma = np.asarray(sigma).flatten() if sigma is not None else None
+        pred = model.predict(X, sigma=True)
+        y_hat = np.asarray(pred.y).flatten()
+        sigma = np.asarray(pred.sigma).flatten() if pred.sigma is not None else None
         if sigma is not None and not np.all(np.isfinite(sigma)):
             sigma = None
         return y_hat, sigma
     except Exception:
-        return np.asarray(model.predict(X)).flatten(), None
+        return np.asarray(model.predict(X).y).flatten(), None
 
 
 class BenchmarkResult:

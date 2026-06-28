@@ -8,6 +8,7 @@ except:  # noqa: E722  (optional dependency import guard)
     raise Exception("Model not found. Please execute: 'pip install sklearn'")
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 
 
 class PolynomialRegression(Model):
@@ -28,5 +29,5 @@ class PolynomialRegression(Model):
         else:
             raise Exception(f"For Polynomial Regression of degree {self.degree} at least {n_min_points} are necessary.")
 
-    def _predict(self, X, out):
-        out["y"] = self.model.predict(X)[:, None]
+    def _predict(self, X, sigma=False, grad=False):
+        return Prediction(y=self.model.predict(X)[:, None])

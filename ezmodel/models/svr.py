@@ -9,6 +9,7 @@ except:  # noqa: E722  (optional dependency import guard)
 
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 
 
 class SVR(Model):
@@ -24,5 +25,5 @@ class SVR(Model):
         regr.fit(X, y[:, 0])
         self.model = regr
 
-    def _predict(self, X, out):
-        out["y"] = self.model.predict(X)[:, None]
+    def _predict(self, X, sigma=False, grad=False):
+        return Prediction(y=self.model.predict(X)[:, None])

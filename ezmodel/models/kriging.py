@@ -6,6 +6,7 @@ from pydacefit.dace import DACE
 from pydacefit.regr import LinearRegression
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 
 
 class Kriging(Model):
@@ -35,17 +36,10 @@ class Kriging(Model):
         self.model = DACE(regr=self.regr, corr=self.corr, theta=theta, thetaL=thetaL, thetaU=thetaU)
         self.model.fit(X, y)
 
-    def _predict(self, X, out, **kwargs):
-        calc_sigma = "sigma" in out
-        calc_variance = "var" in out
-
-        return_mse = calc_variance or calc_sigma
-
-        ret = self.model.predict(X, return_mse=return_mse, **kwargs)
-
-        if not return_mse:
-            out["y"] = ret
-        else:
-            out["y"], var = ret
-            var[var <= 0] = 0
-            out["var"], out["sigma"] = var, np.sqrt(var)
+    def _predict(self, X, sigma=False, grad=False):
+        # DACE.predict returns its own Prediction(y, mse, grad); mse/grad are computed
+        # only when requested and share the single Cholesky solve with the mean. The
+        # gradient comes back in original (destandardized) space already.
+        pred = self.model.predict(X, mse=sigma, grad=grad)
+        std = np.sqrt(np.clip(pred.mse, 0.0, None)) if sigma else None
+        return Prediction(y=pred.y, sigma=std, grad=pred.grad)

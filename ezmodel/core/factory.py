@@ -18,16 +18,30 @@ def cartesian(clazz, **axes):
 
     Returns:
         An ordered ``{name: instance}`` dict over the cartesian product of the axes.
+
+    Raises:
+        ValueError: If an axis has duplicate tokens, or two combinations resolve to the
+            same model name (which would otherwise silently overwrite each other).
     """
-    axes = {
-        k: (v if isinstance(v, dict) else {str(x): x for x in (v if isinstance(v, (list, tuple)) else [v])})
-        for k, v in axes.items()
-    }
+
+    def _named(values):
+        if isinstance(values, dict):
+            return values
+        items = list(values) if isinstance(values, (list, tuple)) else [values]
+        tokens = [str(x) for x in items]
+        if len(set(tokens)) != len(tokens):
+            raise ValueError(f"cartesian got duplicate tokens in an axis: {tokens}")
+        return dict(zip(tokens, items))
+
+    axes = {k: _named(v) for k, v in axes.items()}
     out = {}
     for combo in itertools.product(*(d.items() for d in axes.values())):
         token = ",".join(t for t, _ in combo)
         config = {k: val for k, (_, val) in zip(axes, combo)}
-        out[f"{clazz.__name__}[{token}]" if token else clazz.__name__] = clazz(**config)
+        name = f"{clazz.__name__}[{token}]" if token else clazz.__name__
+        if name in out:
+            raise ValueError(f"cartesian produced a duplicate model name {name!r}; use distinct axis tokens")
+        out[name] = clazz(**config)
     return out
 
 

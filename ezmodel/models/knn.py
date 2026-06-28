@@ -3,6 +3,7 @@
 import numpy as np
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 from ezmodel.util.dist import calc_dist
 
 
@@ -15,7 +16,7 @@ class KNN(Model):
     def _fit(self, X, y, **kwargs):
         pass
 
-    def _predict(self, X, out):
+    def _predict(self, X, sigma=False, grad=False):
         _X, _y = self.X, self.y[:, 0]
 
         D = calc_dist(X, _X)
@@ -34,4 +35,4 @@ class KNN(Model):
 
         y = (_d * _y).sum(axis=1)
 
-        out["y"] = y[:, None]
+        return Prediction(y=y[:, None])

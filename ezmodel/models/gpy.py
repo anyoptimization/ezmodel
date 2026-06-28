@@ -8,6 +8,7 @@ except:  # noqa: E722  (optional dependency import guard)
 import numpy as np
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 
 kernels = {
     "matern32": GPy.kern.Matern32,
@@ -52,12 +53,7 @@ class gpyGP(Model):
 
         self.model = model
 
-    def _predict(self, X, out):
-        if "sigma" in out:
-            out["y"], var = self.model.predict(X)
-
-            var[var <= 0] = 0
-            out["var"] = var
-            out["sigma"] = np.sqrt(var)
-        else:
-            out["y"], _ = self.model.predict(X)
+    def _predict(self, X, sigma=False, grad=False):
+        y, var = self.model.predict(X)
+        std = np.sqrt(np.clip(var, 0.0, None)) if sigma else None
+        return Prediction(y=y, sigma=std)

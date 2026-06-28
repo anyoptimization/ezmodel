@@ -1,6 +1,7 @@
 """Inverse distance weighting (IDW) surrogate model."""
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 from ezmodel.experimental.custom.kernel import dist
 
 
@@ -13,7 +14,7 @@ class InverseDistanceWeighting(Model):
     def _fit(self, X, y, **kwargs):
         pass
 
-    def _predict(self, X, out, **kwargs):
+    def _predict(self, X, sigma=False, grad=False):
         _X, _y = self.X, self.y[:, 0]
 
         D = dist(X, _X)
@@ -31,4 +32,4 @@ class InverseDistanceWeighting(Model):
 
         y = (_y * w).sum(axis=1)
 
-        out["y"] = y[:, None]
+        return Prediction(y=y[:, None])

@@ -3,6 +3,7 @@
 import numpy as np
 
 from ezmodel.core.model import Model
+from ezmodel.core.prediction import Prediction
 from ezmodel.util.dist import calc_dist
 
 
@@ -62,9 +63,8 @@ class RBF(Model):
         else:
             self.model = rbf_fit(X, y, kernel, tail=tail, rho=rho, sigma=sigma, normalized=normalized)
 
-    def _predict(self, X, out):
-        y_hat = rbf_predict(self.model, X)
-        out["y"] = y_hat
+    def _predict(self, X, sigma=False, grad=False):
+        return Prediction(y=rbf_predict(self.model, X))
 
 
 def rbf_kernel(X, phi, tail="linear", **kwargs):

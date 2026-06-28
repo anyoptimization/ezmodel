@@ -17,7 +17,8 @@ model.fit(X, y)
 
 # predict the data using the model
 _X = _X[np.argsort(_X[:, 0])]
-y_hat, y_var = model.predict(_X, return_values_of=["y", "var"])
+pred = model.predict(_X, sigma=True)
+y_hat, y_sigma = pred.y, pred.sigma
 
 # calculate the error and print it
 mae = calc_metric("mae", _y, y_hat)

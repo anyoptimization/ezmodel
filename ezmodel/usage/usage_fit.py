@@ -25,7 +25,7 @@ model = fit(X, y, models=models, partitions=RandomPartitioning().do(X))
 
 # predict over a sorted grid for a clean line plot
 _X = _X[np.argsort(_X[:, 0])]
-y_hat = model.predict(_X)
+y_hat = model.predict(_X).y
 
 plt.scatter(X, y, label="Data")
 plt.plot(_X, y_hat, color="black", label="Regression")

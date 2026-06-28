@@ -21,48 +21,24 @@ def fit(
     return_selection=False,
     **kwargs,
 ):
-    """
+    """Find the best out of a variety of surrogates regarding a metric.
 
-    Find the best out of a variety of surrogates regarding a metric.
+    Args:
+        X: The design space data.
+        y: The target value to model
+        X_test: If no partitioning but a test set should be used this shall be set
+        y_test: If no partitioning but a test set should be used this shall be set
+        partitions: The partitions to be used to find the best surrogate
+        clazzes: class instances which are used to create the models
+        defaults: If the classes should be instantiated by default values they should be set here
+        models: The models can also be provided directly. Then clazzes and defaults can be `None`
+        return_benchmark: Whether the benchmark shall finally be return too or not
+        return_selection: Whether the selection shall finally be returned too or not
+        **kwargs: Additional keyword arguments forwarded to the model selection
 
-    Parameters
-    ----------
-    X : np.array
-        The design space data.
-
-    y : np.array
-        The target value to model
-
-    X_test : optional, np.array
-        If no partitioning but a test set should be used this shall be set
-
-    y_test : optional, np.array
-        If no partitioning but a test set should be used this shall be set
-
-    partitions : list
-        The partitions to be used to find the best surrogate
-
-    clazzes : list
-        class instances which are used to create the models
-
-    defaults : dict
-        If the classes should be instantiated by default values they should be set here
-
-    models : list
-        The models can also be provided directly. Then clazzes and defaults can be `None`
-
-    return_benchmark : bool
-        Whether the benchmark shall finally be return too or not
-
-    Returns
-    -------
-    model : Model
-        The best model found on the data.
-
-    benchmark : Benchmark
-        The benchmark used to find the best model.
-
-
+    Returns:
+        model: The best model found on the data.
+        benchmark: The benchmark used to find the best model.
     """
     if X_test is not None and y_test is not None:
         X, y, partitions = merge_and_partition((X, y), (X_test, y_test))

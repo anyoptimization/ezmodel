@@ -26,22 +26,15 @@ CALIBRATION = "calibration"  # is the predicted uncertainty trustworthy
 class Metric:
     """A single evaluation metric and the metadata needed to use it correctly.
 
-    Parameters
-    ----------
-    name : str
-        Short registry key (e.g. ``"rmse"``).
-    func : Callable
-        Implementation: ``func(y, y_hat)`` for point metrics, ``func(y, y_hat, sigma)``
-        for probabilistic ones.
-    greater_is_better : bool
-        Direction of improvement. Lets ``Benchmark``/``ModelSelection`` sort without a
-        hand-passed ``ascending`` flag.
-    family : str
-        One of ``ACCURACY``/``FIT``/``RANKING``/``SELECTION``/``CALIBRATION``.
-    kind : str
-        ``POINT`` or ``PROBABILISTIC`` (whether ``sigma`` is required).
-    description : str
-        One-line human description.
+    Attributes:
+        name: Short registry key (e.g. ``"rmse"``).
+        func: Implementation: ``func(y, y_hat)`` for point metrics, ``func(y, y_hat, sigma)``
+            for probabilistic ones.
+        greater_is_better: Direction of improvement. Lets ``Benchmark``/``ModelSelection`` sort
+            without a hand-passed ``ascending`` flag.
+        family: One of ``ACCURACY``/``FIT``/``RANKING``/``SELECTION``/``CALIBRATION``.
+        kind: ``POINT`` or ``PROBABILISTIC`` (whether ``sigma`` is required).
+        description: One-line human description.
     """
 
     name: str
@@ -267,21 +260,14 @@ def metric_names(family: Optional[str] = None, kind: Optional[str] = None) -> li
 def evaluate(y, y_hat, sigma=None, names=None) -> dict:
     """Evaluate a model holistically, grouped by metric family.
 
-    Parameters
-    ----------
-    y : array_like
-        Ground-truth target values.
-    y_hat : array_like
-        Predicted mean values.
-    sigma : array_like, optional
-        Predictive standard deviations. Calibration metrics are only computed when given.
-    names : list, optional
-        Restrict to these metric names. Defaults to all metrics whose inputs are available
-        (point metrics always; calibration metrics only when ``sigma`` is provided).
+    Args:
+        y: Ground-truth target values.
+        y_hat: Predicted mean values.
+        sigma: Predictive standard deviations. Calibration metrics are only computed when given.
+        names: Restrict to these metric names. Defaults to all metrics whose inputs are available
+            (point metrics always; calibration metrics only when ``sigma`` is provided).
 
-    Returns
-    -------
-    dict
+    Returns:
         ``{family: {metric_name: value}}`` for every evaluated metric.
     """
     if names is None:

@@ -1,60 +1,38 @@
 """Kriging (Gaussian process) surrogate model."""
 
-import sys
-from inspect import getmembers
-
 import numpy as np
+from pydacefit.corr import RationalQuadratic
 from pydacefit.dace import DACE
+from pydacefit.regr import LinearRegression
 
 from ezmodel.core.model import Model
 
 
-def get_corr(corr):
-    # allow passing a ready-made kernel instance (e.g. RationalQuadratic(alpha=0.25))
-    # directly, not just a name to look up in pydacefit.corr
-    if callable(corr):
-        return corr
-    for name, func in getmembers(sys.modules["pydacefit.corr"]):
-        if name == "corr_" + corr:
-            return func
-    raise Exception("Correlation not found.")
-
-
-def get_regr(corr):
-    for name, func in getmembers(sys.modules["pydacefit.regr"]):
-        if name == "regr_" + corr:
-            return func
-    raise Exception("Regression not found not found.")
-
-
 class Kriging(Model):
-    def __init__(
-        self, regr="linear", corr="gauss", ARD=False, theta=1.0, thetaL=0.00001, thetaU=100.0, **kwargs
-    ) -> None:
+    def __init__(self, regr=None, corr=None, ARD=False, theta=1.0, thetaL=0.00001, thetaU=100.0, **kwargs) -> None:
 
         super().__init__(eliminate_duplicates=True, **kwargs)
-        self.regr = regr
-        self.corr = corr
+        # regr/corr are pydacefit objects (e.g. LinearRegression(), Gaussian(),
+        # RationalQuadratic(alpha=0.25)) passed straight through to DACE. The default
+        # kernel is RationalQuadratic(alpha=0.25) -- the best all-round performer across
+        # the test-function benchmark; the trend defaults to a linear one.
+        self.regr = regr if regr is not None else LinearRegression()
+        self.corr = corr if corr is not None else RationalQuadratic(0.25)
         self.ARD = ARD
         self.theta = theta
         self.thetaL = thetaL
         self.thetaU = thetaU
 
     def _fit(self, X, y, **kwargs):
-        func_regr, func_corr = get_regr(self.regr), get_corr(self.corr)
         theta, thetaL, thetaU = self.theta, self.thetaL, self.thetaU
 
-        if self.ARD:
-            if self.thetaL is None or self.thetaU is None:
-                pass
-                # raise Exception("Bounds of theta must be given for Automatic Relevance Detection (ARD)!")
-            else:
-                _, m = X.shape
-                theta = np.full(m, theta)
-                thetaL = np.full(m, thetaL)
-                thetaU = np.full(m, thetaU)
+        if self.ARD and self.thetaL is not None and self.thetaU is not None:
+            _, m = X.shape
+            theta = np.full(m, theta)
+            thetaL = np.full(m, thetaL)
+            thetaU = np.full(m, thetaU)
 
-        self.model = DACE(regr=func_regr, corr=func_corr, theta=theta, thetaL=thetaL, thetaU=thetaU)
+        self.model = DACE(regr=self.regr, corr=self.corr, theta=theta, thetaL=thetaL, thetaU=thetaU)
         self.model.fit(X, y)
 
     def _predict(self, X, out, **kwargs):
@@ -71,12 +49,3 @@ class Kriging(Model):
             out["y"], var = ret
             var[var <= 0] = 0
             out["var"], out["sigma"] = var, np.sqrt(var)
-
-    @classmethod
-    def hyperparameters(cls):
-        return {
-            "regr": ["constant", "linear"],
-            "corr": ["gauss", "cubic", "exp", "rq"],
-            "thetaU": [20, 100],
-            "ARD": [False, True],
-        }

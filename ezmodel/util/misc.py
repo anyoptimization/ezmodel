@@ -49,10 +49,6 @@ def empty_dict_if_none(x):
         return x
 
 
-def dict_to_str(vals, delim=",", sep="="):
-    return delim.join(f"{key}{sep}{value}" for key, value in vals.items())
-
-
 def discretize(X, n_partitions, xl=None, xu=None):
     if xl is None:
         xl = X.min(axis=0)

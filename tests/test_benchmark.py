@@ -1,7 +1,10 @@
 """Tests for the model benchmark."""
 
+from pydacefit.corr import Gaussian, RationalQuadratic
+from pydacefit.regr import LinearRegression
+
 from ezmodel.core.benchmark import Benchmark
-from ezmodel.core.factory import ModelFactoryByClazz
+from ezmodel.core.factory import cartesian
 from ezmodel.models.kriging import Kriging
 from ezmodel.util.partitioning.crossvalidation import CrossvalidationPartitioning
 from ezmodel.util.sample_from_func import sine_function
@@ -10,7 +13,9 @@ from ezmodel.util.sample_from_func import sine_function
 def test_benchmark():
     X, y, _X, _y = sine_function(100, 20)
 
-    models = ModelFactoryByClazz(Kriging).do()
+    models = cartesian(
+        Kriging, regr={"lin": LinearRegression()}, corr={"gauss": Gaussian(), "rq": RationalQuadratic(alpha=1.0)}
+    )
     benchmark = Benchmark(models)
 
     partitions = CrossvalidationPartitioning(5).do(X)

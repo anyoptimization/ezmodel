@@ -1,86 +1,47 @@
-"""Factories that instantiate model objects from classes and parameter grids."""
+"""Build named model instances from a class and per-axis value grids."""
 
-import copy
-from abc import abstractmethod
-
-from ezmodel.util.misc import dict_to_str
+import itertools
 
 
-class ModelFactory:
-    @abstractmethod
-    def do(self):
-        pass
+def cartesian(clazz, **axes):
+    """Instantiate every combination of the given axes as a ``{name: model}`` dict.
 
+    Each axis is either a ``{token: value}`` dict -- naming the value where it is
+    declared -- or a plain list/scalar, shorthand for ``{str(v): v}`` (clean for
+    strings, e.g. ``kernel=["cubic", "gaussian"]``). The model name concatenates the
+    chosen per-axis tokens, so the name is authored at the call site rather than
+    scraped from each value's ``repr``.
 
-class ModelFactoryByClazz(ModelFactory):
-    def __init__(self, clazz, params=None, create_instance=True, **kwargs) -> None:
-        super().__init__()
-        self.clazz = clazz
-        self.kwargs = kwargs
-        self.params = params
-        self.create_instance = create_instance
+    Args:
+        clazz: The model class to instantiate.
+        **axes: Per-parameter value grids (dict, list/tuple, or a single scalar).
 
-    def do(self):
-        params, clazz, kwargs = self.params, self.clazz, self.kwargs
-        if params is None:
-            params = self.clazz.hyperparameters()
-
-        ret = {}
-        for vals in dfs(params):
-            label = f"{clazz.__name__}[{dict_to_str(vals)}]"
-
-            obj = None
-            if self.create_instance:
-                all_kwargs = {**kwargs, **vals}
-                obj = clazz(**all_kwargs)
-
-            ret[label] = dict(label=label, clazz=clazz, params=vals, defaults=kwargs, model=obj)
-
-        return ret
+    Returns:
+        An ordered ``{name: instance}`` dict over the cartesian product of the axes.
+    """
+    axes = {
+        k: (v if isinstance(v, dict) else {str(x): x for x in (v if isinstance(v, (list, tuple)) else [v])})
+        for k, v in axes.items()
+    }
+    out = {}
+    for combo in itertools.product(*(d.items() for d in axes.values())):
+        token = ",".join(t for t, _ in combo)
+        config = {k: val for k, (_, val) in zip(axes, combo)}
+        out[f"{clazz.__name__}[{token}]" if token else clazz.__name__] = clazz(**config)
+    return out
 
 
 def models_from_clazzes(*clazzes, **defaults):
-    models = {}
-    for clazz in clazzes:
-        models = {**models, **ModelFactoryByClazz(clazz, **defaults).do()}
-    return models
+    """Build one default-configured model per class (kept for downstream imports).
 
+    Deprecated thin shim over direct construction -- prefer :func:`cartesian` to
+    declare an explicit, named sweep.
 
-# --------------------------------------------------------------
-# Util
-# --------------------------------------------------------------
+    Args:
+        *clazzes: Model classes to instantiate with the shared defaults.
+        **defaults: Keyword arguments passed to every constructor.
 
-
-def dfs(params):
-    """Expand a dict of parameter lists into all value combinations.
-
-    Parameters
-    ----------
-    params : dict
-    A dictionary where each key has a list of values.
-
-    Returns
-    -------
-    comb : list
-    All possible combinations of this dictionary having selected
-    one entry from each key.
-
+    Returns:
+        A ``{class_name: instance}`` dict, one entry per class.
     """
-    ret = []
-    dfs_rec({}, params, ret)
-    return ret
-
-
-def dfs_rec(entry, params, ret):
-    if len(params) == 0:
-        ret.append(entry)
-    else:
-        _params = copy.deepcopy(params)
-        key = list(params.keys())[0]
-        del _params[key]
-
-        for value in params[key]:
-            _comb = copy.deepcopy(entry)
-            _comb[key] = value
-
-            dfs_rec(_comb, _params, ret)
+    return {clazz.__name__: clazz(**defaults) for clazz in clazzes}

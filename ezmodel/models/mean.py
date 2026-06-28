@@ -14,7 +14,3 @@ class SimpleMean(Model):
 
     def _predict(self, X, out):
         out["y"] = np.full((len(X), 1), self.model)
-
-    @classmethod
-    def hyperparameters(cls):
-        return {}

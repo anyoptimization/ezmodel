@@ -26,7 +26,3 @@ class SVR(Model):
 
     def _predict(self, X, out):
         out["y"] = self.model.predict(X)[:, None]
-
-    @classmethod
-    def hyperparameters(cls):
-        return {"kernel": ["linear", "poly", "rbf", "sigmoid"], "eps": [0.1, 0.01], "C": [0.5, 1.0, 2.0]}

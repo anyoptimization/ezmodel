@@ -51,7 +51,3 @@ class RandomForest(Model):
 
     def _predict(self, X, out):
         out["y"] = self.model.predict(discretize(X, self.n_partitions, self.xl, self.xu))[:, None]
-
-    @classmethod
-    def hyperparameters(cls):
-        return {"n_partitions": [20, 50, 100], "n_estimators": [10, 100, 200]}

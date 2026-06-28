@@ -54,16 +54,11 @@ TEST_FUNCTIONS = {
 def get_test_function(name, n_var=2):
     """Return ``(f, xl, xu)`` for a named test function over its conventional box in ``n_var`` dims.
 
-    Parameters
-    ----------
-    name : str
-        One of :data:`TEST_FUNCTIONS`.
-    n_var : int
-        Input dimensionality.
+    Args:
+        name: One of :data:`TEST_FUNCTIONS`.
+        n_var: Input dimensionality.
 
-    Returns
-    -------
-    tuple
+    Returns:
         ``(f, xl, xu)`` where ``f`` maps ``X`` of shape ``(m, n_var)`` to ``(m,)``, and
         ``xl`` / ``xu`` are length-``n_var`` bound arrays.
     """

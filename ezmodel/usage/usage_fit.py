@@ -2,8 +2,9 @@
 
 import matplotlib.pyplot as plt
 import numpy as np
+from pydacefit.corr import Gaussian, RationalQuadratic
 
-from ezmodel.core.factory import models_from_clazzes
+from ezmodel.core.factory import cartesian
 from ezmodel.core.selection import ModelSelection  # noqa: F401  (public surface; used downstream e.g. pysamoo)
 from ezmodel.fit import fit
 from ezmodel.models.kriging import Kriging
@@ -13,15 +14,16 @@ from ezmodel.util.sample_from_func import square_function
 
 X, y, _X, _y = square_function(20, 200, n_var=1)
 
-# select the best model from the given options
-models = models_from_clazzes(RBF, Kriging)
+# build the candidate models as a named grid (cartesian replaces the old hyperparameters())
+models = {
+    **cartesian(Kriging, corr={"gauss": Gaussian(), "rq": RationalQuadratic()}),
+    **cartesian(RBF, kernel=["cubic", "gaussian"], tail=["linear"]),
+}
 
-model = fit(X, y, partitions=RandomPartitioning().do(X))
+# select the best of those models on the data
+model = fit(X, y, models=models, partitions=RandomPartitioning().do(X))
 
-# predict the data using the model
-y_hat = model.predict(_X)
-
-# predict the data using the model
+# predict over a sorted grid for a clean line plot
 _X = _X[np.argsort(_X[:, 0])]
 y_hat = model.predict(_X)
 

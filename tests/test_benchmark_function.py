@@ -1,6 +1,8 @@
 """Tests for the high-level function benchmark (ezmodel.benchmark.benchmark)."""
 
 import numpy as np
+from pydacefit.corr import Gaussian, RationalQuadratic
+from pydacefit.regr import LinearRegression
 
 from ezmodel.benchmark import BenchmarkResult, benchmark, default_models
 from ezmodel.models.knn import KNN
@@ -17,7 +19,7 @@ def test_benchmark_runs_and_summarizes():
         xl=[-2, -2],
         xu=[2, 2],
         n=40,
-        models={"KNN": KNN(), "Kriging[rq]": Kriging(corr="rq")},
+        models={"KNN": KNN(), "Kriging[rq]": Kriging(regr=LinearRegression(), corr=RationalQuadratic(alpha=1.0))},
         n_test=200,
         repeats=3,
         seed=1,
@@ -33,7 +35,15 @@ def test_benchmark_runs_and_summarizes():
 
 
 def test_reproducible_with_seed():
-    kw = dict(xl=[-2, -2], xu=[2, 2], n=30, models={"Kriging[rq]": Kriging(corr="rq")}, n_test=150, repeats=2, seed=7)
+    kw = dict(
+        xl=[-2, -2],
+        xu=[2, 2],
+        n=30,
+        models={"Kriging[rq]": Kriging(regr=LinearRegression(), corr=RationalQuadratic(alpha=1.0))},
+        n_test=150,
+        repeats=2,
+        seed=7,
+    )
     a = benchmark(_f, **kw).mean("rmse")["Kriging[rq]"]
     b = benchmark(_f, **kw).mean("rmse")["Kriging[rq]"]
     assert a == b
@@ -45,7 +55,7 @@ def test_calibration_only_for_models_exposing_sigma():
         xl=[-2, -2],
         xu=[2, 2],
         n=40,
-        models={"KNN": KNN(), "Kriging[gauss]": Kriging(corr="gauss")},
+        models={"KNN": KNN(), "Kriging[gauss]": Kriging(regr=LinearRegression(), corr=Gaussian())},
         n_test=200,
         repeats=2,
         seed=1,
@@ -57,4 +67,5 @@ def test_calibration_only_for_models_exposing_sigma():
 
 def test_default_models_available():
     models = default_models()
-    assert "Kriging[rq]" in models and "KNN" in models
+    assert "KNN" in models
+    assert {f"Kriging[rq[{a}]]" for a in (0.1, 0.25, 0.5, 1.0)} <= set(models)

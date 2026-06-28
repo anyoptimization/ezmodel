@@ -23,28 +23,15 @@ class Benchmark:
     ):
         """Evaluate the performance of surrogate models on a data set.
 
-        Parameters
-        ----------
-        models : list
-            A list of dictionaries where the keys `label` and `obj` need to be set.
-
-        metrics : list
-            What metrics shall be calculated during the benchmark.
-
-        show_warnings : bool
-            Whether warnings should be displayed or not. This can cause to show all warnings from
-            all surrogates.
-
-        raise_exception : bool
-            Whether an exception should be raised if a surrogate fails.
-
-        n_threads : int
-            If multi-threading should be used this can be enabled, then each process of fitting is
-            parallelized.
-
-        verbose : bool
-            Whether the benchmark should provide printouts or not.
-
+        Args:
+            models: A list of dictionaries where the keys `label` and `obj` need to be set.
+            metrics: What metrics shall be calculated during the benchmark.
+            show_warnings: Whether warnings should be displayed or not. This can cause to show all
+                warnings from all surrogates.
+            raise_exception: Whether an exception should be raised if a surrogate fails.
+            n_threads: If multi-threading should be used this can be enabled, then each process of
+                fitting is parallelized.
+            verbose: Whether the benchmark should provide printouts or not.
         """
         super().__init__()
         self.models = dict(models)

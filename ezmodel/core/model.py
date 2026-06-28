@@ -139,10 +139,6 @@ class Model:
             ret = tuple([out[v] for v in return_values_of])
             return ret if len(ret) > 1 else ret[0]
 
-    @classmethod
-    def hyperparameters(cls):
-        return {}
-
     def _preprocess(self, X, y, **kwargs):
         return X, y
 

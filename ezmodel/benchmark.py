@@ -3,7 +3,9 @@
 import copy
 
 import numpy as np
+from pydacefit.corr import Exponential, Gaussian, RationalQuadratic
 
+from ezmodel.core.factory import cartesian
 from ezmodel.models.idw import InverseDistanceWeighting
 from ezmodel.models.knn import KNN
 from ezmodel.models.kriging import Kriging
@@ -22,8 +24,16 @@ def default_models():
         "SVR": SVR(),
         "RBF[cubic]": RBF(kernel="cubic", tail="linear"),
         "RBF[gauss]": RBF(kernel="gaussian", tail="linear"),
-        "Kriging[gauss]": Kriging(corr="gauss"),
-        "Kriging[rq]": Kriging(corr="rq"),
+        # Kriging kernel zoo: Gaussian, Exponential, and the Rational-Quadratic family
+        # swept over alpha (heavier tails as alpha shrinks).
+        **cartesian(
+            Kriging,
+            corr={
+                "gauss": Gaussian(),
+                "exp": Exponential(),
+                **{f"rq[{a}]": RationalQuadratic(a) for a in (0.1, 0.25, 0.5, 1.0)},
+            },
+        ),
     }
 
 
@@ -71,14 +81,10 @@ def _predict_with_sigma(model, X):
 class BenchmarkResult:
     """Holistic benchmark outcome: per-model metric distributions over repeated samples.
 
-    Attributes
-    ----------
-    raw : dict
-        ``{model_name: {metric: [value_per_repeat, ...]}}``.
-    failures : dict
-        ``{model_name: n_failed_fits}``.
-    meta : dict
-        Run settings (``n``, ``repeats``, ``dim``, ...).
+    Attributes:
+        raw: ``{model_name: {metric: [value_per_repeat, ...]}}``.
+        failures: ``{model_name: n_failed_fits}``.
+        meta: Run settings (``n``, ``repeats``, ``dim``, ...).
     """
 
     def __init__(self, raw, failures, meta):
@@ -185,32 +191,21 @@ def benchmark(f, xl, xu, n, models=None, n_test=1000, repeats=11, noise=0.0, see
     true function with the holistic metric suite. Results are aggregated to mean ± std so a
     single lucky/unlucky split cannot dominate.
 
-    Parameters
-    ----------
-    f : callable
-        Black-box function mapping ``X`` of shape ``(m, d)`` to values of shape ``(m,)``.
-    xl, xu : array_like
-        Lower and upper bounds of the box domain (length ``d``).
-    n : int
-        Number of training points sampled from ``f`` per repeat (the evaluation budget).
-    models : dict or list, optional
-        Models to benchmark, as ``{name: model}`` or a list of model instances. Defaults to
-        :func:`default_models`.
-    n_test : int
-        Size of the held-out test cloud used for scoring.
-    repeats : int
-        Number of independent train/test resamples to average over.
-    noise : float
-        Standard deviation of Gaussian noise added to the training labels (test labels stay
-        the noise-free truth).
-    seed : int
-        Base random seed; repeat ``i`` uses ``seed + i``.
-    sampling : str
-        ``"lhs"`` (Latin hypercube) or ``"random"`` (uniform) training-point sampling.
+    Args:
+        f: Black-box function mapping ``X`` of shape ``(m, d)`` to values of shape ``(m,)``.
+        xl: Lower bound of the box domain (length ``d``).
+        xu: Upper bound of the box domain (length ``d``).
+        n: Number of training points sampled from ``f`` per repeat (the evaluation budget).
+        models: Models to benchmark, as ``{name: model}`` or a list of model instances. Defaults to
+            :func:`default_models`.
+        n_test: Size of the held-out test cloud used for scoring.
+        repeats: Number of independent train/test resamples to average over.
+        noise: Standard deviation of Gaussian noise added to the training labels (test labels stay
+            the noise-free truth).
+        seed: Base random seed; repeat ``i`` uses ``seed + i``.
+        sampling: ``"lhs"`` (Latin hypercube) or ``"random"`` (uniform) training-point sampling.
 
-    Returns
-    -------
-    BenchmarkResult
+    Returns:
         Aggregated, printable summary with per-model metric distributions and an overall
         direction-aware ranking.
     """

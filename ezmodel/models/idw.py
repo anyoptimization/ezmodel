@@ -32,7 +32,3 @@ class InverseDistanceWeighting(Model):
         y = (_y * w).sum(axis=1)
 
         out["y"] = y[:, None]
-
-    @classmethod
-    def hyperparameters(cls):
-        return {}

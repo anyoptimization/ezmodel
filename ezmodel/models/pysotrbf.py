@@ -25,14 +25,6 @@ class pySOTRBF(Model):
     def _predict(self, X, out):
         out["y"] = self.model.predict(X)
 
-    @classmethod
-    def hyperparameters(cls):
-        return {
-            "kernel": ["cubic", "tps"],
-            "tail": ["linear"],
-            "eta": [1e-12, 1e-6, 1e-4, 1e-2],
-        }
-
 
 def get_kernel(kernel):
     if kernel == "cubic":

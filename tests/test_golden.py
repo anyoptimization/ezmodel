@@ -2,6 +2,8 @@
 
 import numpy as np
 import pytest
+from pydacefit.corr import Exponential, Gaussian, RationalQuadratic
+from pydacefit.regr import LinearRegression
 
 from ezmodel.models.idw import InverseDistanceWeighting
 from ezmodel.models.kriging import Kriging
@@ -47,13 +49,15 @@ def test_rbf_predict_golden(kernel):
 @pytest.mark.golden
 @pytest.mark.parametrize(
     "corr",
-    ["gauss", "exp", "rq"],
+    [Gaussian(), Exponential(), RationalQuadratic(alpha=1.0)],
     ids=["gauss", "exp", "rq"],
 )
 def test_kriging_predict_golden(corr):
     """Kriging predictions per correlation kernel (incl. the new ``rq``) must not move."""
     X, y, X_test = _dataset()
-    model = Kriging(corr=corr).fit(X, y)
+    # pin the trend explicitly: the baseline was recorded under a linear trend, so it
+    # must not silently shift if the Kriging default regr changes (constant vs linear).
+    model = Kriging(regr=LinearRegression(), corr=corr).fit(X, y)
     return model.predict(X_test).flatten()
 
 

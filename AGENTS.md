@@ -14,8 +14,9 @@ skill is how to write good code.**
 
 ## ezmodel conventions (pyclawd adoption)
 
-- **Docstrings: numpy style** (`[tool.ruff.lint.pydocstyle] convention = "numpy"`).
-  Types go in **annotations only**, never in docstrings.
+- **Docstrings: Google style** (`[tool.ruff.lint.pydocstyle] convention = "google"`) —
+  `Args:` / `Returns:` / `Raises:` / `Attributes:`. Types go in **annotations only**,
+  never in docstrings.
 - **One line per file**: every in-scope `.py` opens with a one-line module/package
   description (gated by the `descriptions` step). `__init__.py` describes the package.
 - **Out of scope for the gate**: `ezmodel/experimental/` (rough, partially-broken

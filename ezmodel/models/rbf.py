@@ -66,15 +66,6 @@ class RBF(Model):
         y_hat = rbf_predict(self.model, X)
         out["y"] = y_hat
 
-    @classmethod
-    def hyperparameters(cls):
-        return {
-            "kernel": ["linear", "cubic", "gaussian", "mq"],
-            "tail": ["constant", "linear", "quadratic", "linear+quadratic"],
-            # "rho": [None, 1e-3, 1e-2, 1e-1, 0.5, 1.0, 2.0],
-            "normalized": [True, False],
-        }
-
 
 def rbf_kernel(X, phi, tail="linear", **kwargs):
     n, m = X.shape

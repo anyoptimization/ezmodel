@@ -1,5 +1,35 @@
-# pyproject.toml — tooling config for the pyclawd quality gate.
-# Curated for ezmodel during pyclawd adoption (see AGENTS.md).
+# pyproject.toml — packaging metadata + tooling config for the pyclawd quality gate.
+
+[build-system]
+requires = ["setuptools>=77"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "ezmodel"
+dynamic = ["version"]
+description = "Machine Learning, Model, Surrogate, Metamodels, Response Surface"
+readme = "README.rst"
+requires-python = ">=3.6"
+license = "Apache-2.0"
+authors = [{ name = "Julian Blank", email = "blankjul@outlook.com" }]
+keywords = ["model"]
+dependencies = ["numpy", "pandas", "scipy", "scikit-learn", "pydacefit", "matplotlib"]
+classifiers = [
+    "Intended Audience :: Developers",
+    "Intended Audience :: Science/Research",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Topic :: Scientific/Engineering",
+    "Topic :: Scientific/Engineering :: Artificial Intelligence",
+    "Topic :: Scientific/Engineering :: Mathematics",
+]
+
+[tool.setuptools.dynamic]
+version = { attr = "ezmodel.version.__version__" }
+
+[tool.setuptools.packages.find]
+include = ["ezmodel*"]
 
 [tool.ruff]
 line-length = 120
@@ -15,8 +45,8 @@ select = ["E", "F", "I", "D"]
 ignore = ["D101", "D102", "D103", "D105", "D107"]
 
 [tool.ruff.lint.pydocstyle]
-# ezmodel's existing docstrings are numpy-style.
-convention = "numpy"
+# ezmodel uses Google-style docstrings (Args:/Returns:/Raises:); types in annotations only.
+convention = "google"
 
 [tool.mypy]
 files = ["ezmodel"]

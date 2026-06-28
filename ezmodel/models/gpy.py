@@ -61,10 +61,3 @@ class gpyGP(Model):
             out["sigma"] = np.sqrt(var)
         else:
             out["y"], _ = self.model.predict(X)
-
-    @classmethod
-    def hyperparameters(cls):
-        return {
-            "kernel": ["matern52", "ratquad", "exponential"],
-            "ARD": [False, True],
-        }

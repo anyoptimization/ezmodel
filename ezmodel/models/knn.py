@@ -35,7 +35,3 @@ class KNN(Model):
         y = (_d * _y).sum(axis=1)
 
         out["y"] = y[:, None]
-
-    @classmethod
-    def hyperparameters(cls):
-        return {"n_nearest": [3, 5, 10], "p": [0.0, 1.0, 2.0, 5.0]}

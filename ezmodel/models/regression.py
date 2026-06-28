@@ -1,7 +1,5 @@
 """Polynomial regression surrogate model."""
 
-import numpy as np
-
 try:
     from sklearn.linear_model import LinearRegression
     from sklearn.pipeline import make_pipeline
@@ -32,7 +30,3 @@ class PolynomialRegression(Model):
 
     def _predict(self, X, out):
         out["y"] = self.model.predict(X)[:, None]
-
-    @classmethod
-    def hyperparameters(cls):
-        return {"degree": np.arange(1, 4)}

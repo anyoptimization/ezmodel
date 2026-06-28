@@ -35,7 +35,3 @@ class smtKriging(Model):
             var[var <= 0] = 0
             out["var"] = var
             out["sigma"] = np.sqrt(var)
-
-    @classmethod
-    def hyperparameters(cls):
-        return {}

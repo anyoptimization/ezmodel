@@ -12,7 +12,7 @@ from pyclawd import (
 project = Project(
     name="ezmodel",
     conda_env=None,
-    root_markers=["setup.py", "ezmodel/__init__.py"],
+    root_markers=["pyproject.toml", "ezmodel/__init__.py"],
     # The pyclawd this config was built on. `pyclawd doctor` WARNs if the
     # running pyclawd has drifted to a different minor (migration may be needed).
     pyclawd_version="0.1.0",

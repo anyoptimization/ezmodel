@@ -29,13 +29,14 @@ classifiers = [
 version = { attr = "ezmodel.version.__version__" }
 
 [tool.setuptools.packages.find]
-include = ["ezmodel*"]
+# src layout: packages live under src/, so discovery is rooted there.
+where = ["src"]
 
 [tool.ruff]
 line-length = 120
 # experimental/ holds rough, partially-broken scratch code (dead imports); it is
 # out of scope for the gate. scratch.py is a developer scratchpad, not source.
-extend-exclude = ["ezmodel/experimental", "tests/scratch.py"]
+extend-exclude = ["src/ezmodel/experimental", "tests/scratch.py"]
 
 [tool.ruff.lint]
 # One-line-per-file docstring doctrine: enable pydocstyle (D) for module/package
@@ -49,10 +50,11 @@ ignore = ["D101", "D102", "D103", "D105", "D107"]
 convention = "google"
 
 [tool.mypy]
-files = ["ezmodel"]
+files = ["src/ezmodel"]
 explicit_package_bases = true
+mypy_path = "src"
 # experimental/ is out of scope (dead imports would error).
-exclude = "ezmodel/experimental/"
+exclude = "src/ezmodel/experimental/"
 # Scientific-Python deps (numpy/pandas/scipy/sklearn/matplotlib + optional model
 # backends) ship without type stubs; don't fail typecheck on missing third-party stubs.
 ignore_missing_imports = true
